@@ -148,72 +148,47 @@ export const AIAnalytics: React.FC = () => {
           </p>
         </motion.div>
 
-        {/* AI Avatar and Status */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1 }}
-          className="flex justify-center mb-12 max-w-7xl mx-auto"
-        >
-          <div className={`glassmorphism p-8 xl:p-12 rounded-3xl ${themeColors.border} border`}>
-            <div className="relative">
-              {/* AI Brain Icon */}
-              <motion.div
-                animate={{ rotate: aiStatus === 'analyzing' ? 360 : 0 }}
-                transition={{ duration: 3, repeat: aiStatus === 'analyzing' ? Infinity : 0, ease: "linear" }}
-                className="relative"
-              >
-                <div className="w-24 h-24 xl:w-32 xl:h-32 bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-500 rounded-full flex items-center justify-center">
-                  <Brain className="w-12 h-12 xl:w-16 xl:h-16 text-white" />
-                </div>
-                
-                {/* Pulse Rings */}
-                {aiStatus === 'analyzing' && (
-                  <>
-                    <motion.div
-                      animate={{ scale: [1, 2, 1], opacity: [0.6, 0, 0.6] }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                      className="absolute inset-0 border-2 border-indigo-400 rounded-full"
-                    />
-                    <motion.div
-                      animate={{ scale: [1, 2.5, 1], opacity: [0.4, 0, 0.4] }}
-                      transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
-                      className="absolute inset-0 border-2 border-purple-400 rounded-full"
-                    />
-                  </>
-                )}
-              </motion.div>
-              
-              {/* Status Text */}
-              <div className="text-center mt-4">
-                <motion.div
-                  animate={{ opacity: [0.5, 1, 0.5] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
-                  className={`text-lg xl:text-xl font-semibold ${themeColors.text} mb-2`}
-                >
-                  {aiStatus === 'analyzing' ? 'AI Analyzing...' : 'AI Ready'}
-                </motion.div>
-                <div className={`text-sm xl:text-base ${themeColors.textSecondary}`}>
-                  Processing 1.2M data points
-                </div>
-              </div>
-            </div>
-          </div>
-        </motion.div>
 
         {/* Metrics Row */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="grid grid-cols-2 lg:grid-cols-4 gap-4 xl:gap-8 mb-12 max-w-7xl mx-auto"
+          className="grid grid-cols-2 lg:grid-cols-5 gap-4 xl:gap-8 mb-12 max-w-7xl mx-auto"
         >
+          {/* AI Analyzing Card */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6 }}
+            whileHover={{ scale: 1.05, y: -5 }}
+            className={`glassmorphism p-4 xl:p-8 rounded-2xl ${themeColors.border} border`}
+          >
+            <div className="flex items-center justify-between mb-4">
+              <motion.div
+                animate={{ rotate: aiStatus === 'analyzing' ? 360 : 0 }}
+                transition={{ duration: 3, repeat: aiStatus === 'analyzing' ? Infinity : 0, ease: "linear" }}
+              >
+                <Brain className="w-6 h-6 xl:w-8 xl:h-8 text-purple-400" />
+              </motion.div>
+              <motion.div
+                animate={{ opacity: [0.5, 1, 0.5] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+                className="text-sm font-semibold text-green-400"
+              >
+                LIVE
+              </motion.div>
+            </div>
+            <div className={`text-2xl xl:text-3xl font-bold ${themeColors.text} mb-1`}>AI</div>
+            <div className={`text-sm xl:text-base ${themeColors.textSecondary}`}>Analyzing</div>
+          </motion.div>
+          
           {metrics.map((metric, index) => (
             <motion.div
               key={metric.label}
-              whileHover={{ scale: 1.05, y: -5 }}
-              className={`glassmorphism p-4 xl:p-8 rounded-2xl ${themeColors.border} border`}
-            >
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: (index + 1) * 0.1 }}
               <div className="flex items-center justify-between mb-4">
                 <metric.icon className={`w-6 h-6 xl:w-8 xl:h-8 ${metric.color}`} />
                 <span className={`text-sm font-semibold ${metric.change.startsWith('+') ? 'text-green-400' : 'text-red-400'}`}>
