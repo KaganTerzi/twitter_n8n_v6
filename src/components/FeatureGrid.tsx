@@ -105,24 +105,22 @@ export const FeatureGrid: React.FC = () => {
                     {feature.description}
                   </p>
 
-                  {/* Stats Badge */}
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    className={`inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r ${feature.color} bg-opacity-10 border border-current border-opacity-20`}
-                  >
-                    <span className={`text-sm font-semibold bg-gradient-to-r ${feature.color} bg-clip-text text-transparent`}>
+                  {/* Clear Stats Display */}
+                  <div className="flex items-center justify-between">
+                    <div className={`text-lg font-bold ${themeColors.text}`}>
                       {feature.stats}
-                    </span>
-                  </motion.div>
+                    </div>
+                    <div className={`w-3 h-3 rounded-full bg-gradient-to-r ${feature.color}`} />
+                  </div>
                 </div>
 
-                {/* Interactive Demo Button */}
+                {/* Action Button */}
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="mt-6 w-full py-3 glassmorphism rounded-xl text-sm font-semibold border border-white/10 hover:border-white/30 transition-all duration-300 text-white dark:text-white light:text-gray-900 bg-white/5 dark:bg-white/5 light:bg-gray-900/10"
+                  className={`mt-6 w-full py-3 bg-gradient-to-r ${feature.color} text-white rounded-xl text-sm font-semibold shadow-lg hover:shadow-xl transition-all duration-300`}
                 >
-                  Try Interactive Demo
+                  Explore Feature
                 </motion.button>
               </div>
 
