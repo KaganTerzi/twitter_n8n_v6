@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Brain, Home, BarChart3, Settings, Moon, Sun, Menu, X, MessageSquare, Youtube } from 'lucide-react';
+import { Brain, Home, BarChart3, Settings, Moon, Sun, Menu, X, MessageSquare, Youtube, Languages } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface NavigationProps {
   activeSection: string;
@@ -10,15 +11,16 @@ interface NavigationProps {
 
 export const Navigation: React.FC<NavigationProps> = ({ activeSection, setActiveSection }) => {
   const { theme, toggleTheme, getThemeColors } = useTheme();
+  const { language, toggleLanguage, t } = useLanguage();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const themeColors = getThemeColors();
 
   const navItems = [
-    { id: 'landing', label: 'Home', icon: Home },
-    { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
-    { id: 'social-news', label: 'SocialNews', icon: MessageSquare },
-    { id: 'youtube-analytics', label: 'YouTube Analiz', icon: Youtube },
-    { id: 'settings', label: 'Settings', icon: Settings },
+    { id: 'landing', label: t('nav.home'), icon: Home },
+    { id: 'dashboard', label: t('nav.dashboard'), icon: BarChart3 },
+    { id: 'social-news', label: t('nav.socialNews'), icon: MessageSquare },
+    { id: 'youtube-analytics', label: t('nav.youtubeAnalytics'), icon: Youtube },
+    { id: 'settings', label: t('nav.settings'), icon: Settings },
   ];
 
   return (
@@ -69,6 +71,17 @@ export const Navigation: React.FC<NavigationProps> = ({ activeSection, setActive
                 </motion.button>
               ))}
               
+              {/* Language Toggle */}
+              <motion.button
+                onClick={toggleLanguage}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.9 }}
+                className="p-2 rounded-lg glassmorphism hover:shadow-lg transition-all duration-300 border border-white/20 text-white dark:text-white light:text-gray-900 flex items-center space-x-2"
+              >
+                <Languages className="h-4 w-4" />
+                <span className="text-sm font-semibold">{language.toUpperCase()}</span>
+              </motion.button>
+              
               {/* Light/Dark Mode Toggle */}
               <motion.button
                 onClick={toggleTheme}
@@ -82,6 +95,16 @@ export const Navigation: React.FC<NavigationProps> = ({ activeSection, setActive
 
             {/* Mobile Menu Button */}
             <div className="md:hidden flex items-center space-x-2">
+              <motion.button
+                onClick={toggleLanguage}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.9 }}
+                className="p-2 rounded-lg glassmorphism border border-white/20 text-white dark:text-white light:text-gray-900 flex items-center space-x-1"
+              >
+                <Languages className="h-4 w-4" />
+                <span className="text-xs font-semibold">{language.toUpperCase()}</span>
+              </motion.button>
+              
               <motion.button
                 onClick={toggleTheme}
                 whileHover={{ rotate: 180 }}

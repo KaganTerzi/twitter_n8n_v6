@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { LanguageProvider } from './contexts/LanguageContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { Navigation } from './components/Navigation';
 import { Hero } from './components/Hero';
@@ -30,15 +31,7 @@ function App() {
         );
       case 'dashboard':
         return (
-          <div className="pt-20 min-h-screen">
-            <div className="max-w-7xl mx-auto px-4 py-8">
-              <h1 className="text-3xl font-bold mb-8">Dashboard</h1>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <AIAnalytics />
-                <TrendRadar />
-              </div>
-            </div>
-          </div>
+          <AIAnalytics />
         );
       case 'social-news':
         return <SocialNews />;
@@ -59,12 +52,14 @@ function App() {
   };
 
   return (
-    <ThemeProvider>
-      <div className="min-h-screen">
-        <Navigation activeSection={activeSection} setActiveSection={setActiveSection} />
-        {renderSection()}
-      </div>
-    </ThemeProvider>
+    <LanguageProvider>
+      <ThemeProvider>
+        <div className="min-h-screen">
+          <Navigation activeSection={activeSection} setActiveSection={setActiveSection} />
+          {renderSection()}
+        </div>
+      </ThemeProvider>
+    </LanguageProvider>
   );
 }
 

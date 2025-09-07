@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Brain, TrendingUp, Users, MessageSquare, Zap, Play, ArrowRight, BarChart3, Eye } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface HeroProps {
   setActiveSection: (section: string) => void;
@@ -9,6 +10,7 @@ interface HeroProps {
 
 export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
   const { theme, getThemeColors } = useTheme();
+  const { t } = useLanguage();
   const themeColors = getThemeColors();
 
   return (
@@ -40,10 +42,10 @@ export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
           transition={{ duration: 0.8, delay: 0.2 }}
         >
           <span className={`bg-gradient-to-r ${themeColors.accent} bg-clip-text text-transparent`}>
-            AI Social
+            {t('hero.title').split(' ')[0]} {t('hero.title').split(' ')[1]}
           </span>
           <br />
-          <span className={`${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Intelligence</span>
+          <span className={`${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{t('hero.title').split(' ')[2]}</span>
         </motion.h1>
 
         {/* Subtitle - More Concise */}
@@ -53,7 +55,7 @@ export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
         >
-          Viral trendleri yakalayın, rekabette öne geçin, hepsi yapay zekâ gücüyle
+          {t('hero.subtitle')}
         </motion.p>
 
         {/* Compact Metrics Grid */}
@@ -68,32 +70,32 @@ export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
               { 
                 icon: Brain, 
                 value: 'AI', 
-                label: 'Analyzing', 
+                label: t('ai.analyzing'), 
                 color: 'text-purple-400',
                 animated: true
               },
               { 
                 icon: TrendingUp, 
                 value: '94%', 
-                label: 'Trend Analysis', 
+                label: 'Trend Analysis', // Keep English for metrics
                 color: 'text-blue-400' 
               },
               { 
                 icon: BarChart3, 
                 value: '1.2M', 
-                label: 'Real-time Data', 
+                label: 'Real-time Data', // Keep English for metrics
                 color: 'text-green-400' 
               },
               { 
                 icon: Users, 
                 value: '15K+', 
-                label: 'User Insights', 
+                label: 'User Insights', // Keep English for metrics
                 color: 'text-cyan-400' 
               },
               { 
                 icon: MessageSquare, 
                 value: '98%', 
-                label: 'Predictions', 
+                label: 'Predictions', // Keep English for metrics
                 color: 'text-orange-400' 
               },
             ].map((metric, index) => (
@@ -151,6 +153,7 @@ export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
               transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
             />
             <span>Start Free Trial</span>
+            <span>{t('hero.startTrial')}</span>
             <ArrowRight className="w-5 h-5" />
           </motion.button>
 
@@ -160,7 +163,7 @@ export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
             className={`px-8 lg:px-10 py-3 lg:py-4 glassmorphism rounded-xl font-bold text-base lg:text-lg border border-white/30 hover:border-white/50 transition-all duration-300 flex items-center space-x-3 ${theme === 'dark' ? 'text-white bg-white/10 hover:bg-white/20' : 'text-gray-900 bg-white/80 hover:bg-white/90'} backdrop-blur-sm`}
           >
             <Play className="w-5 h-5" />
-            <span>Watch Demo</span>
+            <span>{t('hero.watchDemo')}</span>
           </motion.button>
         </motion.div>
 
@@ -173,15 +176,15 @@ export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
         >
           <div className="flex items-center space-x-2">
             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            <span className={`${theme === 'dark' ? 'text-slate-400' : 'text-gray-600'}`}>99.9% Uptime</span>
+            <span className={`${theme === 'dark' ? 'text-slate-400' : 'text-gray-600'}`}>{t('hero.uptime')}</span>
           </div>
           <div className="flex items-center space-x-2">
             <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-            <span className={`${theme === 'dark' ? 'text-slate-400' : 'text-gray-600'}`}>No Credit Card</span>
+            <span className={`${theme === 'dark' ? 'text-slate-400' : 'text-gray-600'}`}>{t('hero.noCard')}</span>
           </div>
           <div className="flex items-center space-x-2">
             <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-            <span className={`${theme === 'dark' ? 'text-slate-400' : 'text-gray-600'}`}>14-Day Free Trial</span>
+            <span className={`${theme === 'dark' ? 'text-slate-400' : 'text-gray-600'}`}>{t('hero.freeTrial')}</span>
           </div>
         </motion.div>
       </motion.div>
