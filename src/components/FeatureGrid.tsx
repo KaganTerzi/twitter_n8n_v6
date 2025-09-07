@@ -4,7 +4,8 @@ import { Brain, TrendingUp, Radar, Shield } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
 export const FeatureGrid: React.FC = () => {
-  const { theme, themeColors } = useTheme();
+  const { theme, getThemeColors } = useTheme();
+  const themeColors = getThemeColors();
   const features = [
     {
       icon: Brain,
