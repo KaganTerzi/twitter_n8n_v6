@@ -22,8 +22,8 @@ function App() {
           <>
             <ParticleBackground />
             <Hero setActiveSection={setActiveSection} />
-            <FeatureGrid />
             <AIAnalytics />
+            <FeatureGrid />
             <StatsCounter />
             <PricingSection />
           </>
