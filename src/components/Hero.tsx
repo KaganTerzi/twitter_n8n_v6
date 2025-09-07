@@ -12,7 +12,7 @@ export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
   const themeColors = getThemeColors();
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center relative px-4 sm:px-6 lg:px-8 pt-20 pb-12 overflow-x-hidden">
+    <div className="h-auto flex flex-col justify-start items-center relative px-4 sm:px-6 lg:px-8 pt-16 pb-8 overflow-x-hidden">
       {/* Subtle Background Glow */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
@@ -30,11 +30,11 @@ export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, ease: "easeOut" }}
-        className="text-center max-w-6xl mx-auto w-full relative z-10"
+        className="text-center max-w-6xl mx-auto w-full relative z-10 mt-8"
       >
         {/* Main Headline */}
         <motion.h1
-          className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight"
+          className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-4 leading-tight"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
@@ -48,7 +48,7 @@ export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
 
         {/* Subtitle - More Concise */}
         <motion.p
-          className={`text-lg md:text-xl lg:text-2xl ${theme === 'dark' ? 'text-slate-300' : 'text-gray-700'} mb-8 leading-relaxed max-w-4xl mx-auto font-medium`}
+          className={`text-lg md:text-xl lg:text-2xl ${theme === 'dark' ? 'text-slate-300' : 'text-gray-700'} mb-6 leading-relaxed max-w-4xl mx-auto font-medium`}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
@@ -61,9 +61,9 @@ export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className={`glassmorphism p-6 rounded-2xl mb-8 ${themeColors.border} border max-w-5xl mx-auto`}
+          className={`glassmorphism p-4 lg:p-6 rounded-2xl mb-6 ${themeColors.border} border max-w-5xl mx-auto`}
         >
-          <div className="grid grid-cols-5 gap-6">
+          <div className="grid grid-cols-5 gap-3 lg:gap-6">
             {[
               { 
                 icon: Brain, 
@@ -105,22 +105,22 @@ export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
                 whileHover={{ scale: 1.05, y: -3 }}
                 className="text-center group cursor-pointer"
               >
-                <div className="flex items-center justify-center mb-3">
+                <div className="flex items-center justify-center mb-2">
                   {metric.animated ? (
                     <motion.div
                       animate={{ rotate: 360 }}
                       transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
                     >
-                      <metric.icon className={`w-8 h-8 ${metric.color}`} />
+                      <metric.icon className={`w-6 h-6 lg:w-8 lg:h-8 ${metric.color}`} />
                     </motion.div>
                   ) : (
-                    <metric.icon className={`w-8 h-8 ${metric.color}`} />
+                    <metric.icon className={`w-6 h-6 lg:w-8 lg:h-8 ${metric.color}`} />
                   )}
                 </div>
-                <div className={`text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'} mb-1`}>
+                <div className={`text-xl lg:text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'} mb-1`}>
                   {metric.value}
                 </div>
-                <div className={`text-sm ${theme === 'dark' ? 'text-slate-400' : 'text-gray-600'}`}>
+                <div className={`text-xs lg:text-sm ${theme === 'dark' ? 'text-slate-400' : 'text-gray-600'}`}>
                   {metric.label}
                 </div>
               </motion.div>
@@ -133,7 +133,7 @@ export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.0 }}
-          className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-4"
+          className="flex flex-col sm:flex-row gap-3 justify-center items-center mb-3"
         >
           <motion.button
             whileHover={{ 
@@ -143,7 +143,7 @@ export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
             }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setActiveSection('dashboard')}
-            className={`px-10 py-4 bg-gradient-to-r ${themeColors.secondary} text-white rounded-xl font-bold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center space-x-3 relative overflow-hidden group`}
+            className={`px-8 lg:px-10 py-3 lg:py-4 bg-gradient-to-r ${themeColors.secondary} text-white rounded-xl font-bold text-base lg:text-lg shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center space-x-3 relative overflow-hidden group`}
           >
             <motion.div
               className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -skew-x-12"
@@ -157,7 +157,7 @@ export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
           <motion.button
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.95 }}
-            className={`px-10 py-4 glassmorphism rounded-xl font-bold text-lg border border-white/30 hover:border-white/50 transition-all duration-300 flex items-center space-x-3 ${theme === 'dark' ? 'text-white bg-white/10 hover:bg-white/20' : 'text-gray-900 bg-white/80 hover:bg-white/90'} backdrop-blur-sm`}
+            className={`px-8 lg:px-10 py-3 lg:py-4 glassmorphism rounded-xl font-bold text-base lg:text-lg border border-white/30 hover:border-white/50 transition-all duration-300 flex items-center space-x-3 ${theme === 'dark' ? 'text-white bg-white/10 hover:bg-white/20' : 'text-gray-900 bg-white/80 hover:bg-white/90'} backdrop-blur-sm`}
           >
             <Play className="w-5 h-5" />
             <span>Watch Demo</span>
@@ -169,7 +169,7 @@ export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 1.2 }}
-          className="flex items-center justify-center space-x-8 text-sm"
+          className="flex items-center justify-center space-x-4 lg:space-x-8 text-xs lg:text-sm"
         >
           <div className="flex items-center space-x-2">
             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
