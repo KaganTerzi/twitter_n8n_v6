@@ -189,6 +189,9 @@ export const AIAnalytics: React.FC = () => {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: (index + 1) * 0.1 }}
+              whileHover={{ scale: 1.05, y: -5 }}
+              className={`glassmorphism p-4 xl:p-8 rounded-2xl ${themeColors.border} border`}
+            >
               <div className="flex items-center justify-between mb-4">
                 <metric.icon className={`w-6 h-6 xl:w-8 xl:h-8 ${metric.color}`} />
                 <span className={`text-sm font-semibold ${metric.change.startsWith('+') ? 'text-green-400' : 'text-red-400'}`}>
@@ -260,7 +263,7 @@ export const AIAnalytics: React.FC = () => {
                 whileHover={{ scale: 1.02, y: -5 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setSelectedCategory(category.name)}
-                className={`glassmorphism p-4 xl:p-6 rounded-2xl cursor-pointer ${themeColors.border} border hover:${themeColors.glassBorder} transition-all duration-300 group`}
+                className={`glassmorphism p-4 xl:p-6 rounded-2xl cursor-pointer ${themeColors.border} border hover:${themeColors.glassBorder} transition-all duration-300 group relative`}
               >
                 {/* Trending Badge */}
                 {category.trending && (
