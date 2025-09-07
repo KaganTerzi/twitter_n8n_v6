@@ -53,38 +53,6 @@ export const Hero: React.FC = () => {
           Sosyal medya trendlerini çözmek, viral içeriği tahmin etmek ve rekabette öne geçmek için yapay zekanın gücünden yararlanın
         </motion.p>
 
-        {/* AI Processing Status */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className={`glassmorphism p-4 xl:p-6 rounded-2xl mb-6 max-w-4xl mx-auto ${themeColors.border} border`}
-        >
-          <div className="flex items-center justify-center mb-4">
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-              className={`w-8 h-8 rounded-full bg-gradient-to-r ${themeColors.secondary} flex items-center justify-center mr-3`}
-            >
-              <Brain className="w-4 h-4 text-white" />
-            </motion.div>
-            <div className={`text-lg xl:text-xl font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'} mb-2`}>
-              AI Processing Status
-            </div>
-          </div>
-          
-          <motion.div
-            key={currentText}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.5 }}
-            className="text-green-400 font-mono text-sm"
-          >
-            {aiTexts[currentText]}
-          </motion.div>
-        </motion.div>
-
         {/* Stats Grid */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -92,7 +60,27 @@ export const Hero: React.FC = () => {
           transition={{ duration: 0.8, delay: 0.8 }}
           className={`glassmorphism p-4 xl:p-6 rounded-3xl mb-6 ${themeColors.border} border max-w-6xl mx-auto`}
         >
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 xl:gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 xl:gap-6">
+            {/* AI Processing Status Card */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.9 }}
+              whileHover={{ scale: 1.05, y: -5 }}
+              className="text-center group"
+            >
+              <div className={`w-12 h-12 mx-auto mb-3 rounded-2xl bg-gradient-to-r ${themeColors.secondary}/20 flex items-center justify-center group-hover:shadow-lg transition-all duration-300`}>
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                >
+                  <Brain className="w-6 h-6 xl:w-8 xl:h-8 text-purple-400" />
+                </motion.div>
+              </div>
+              <div className={`text-2xl xl:text-3xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'} mb-1`}>AI</div>
+              <div className={`text-sm xl:text-base ${theme === 'dark' ? 'text-slate-300' : 'text-gray-700'}`}>Analyzing</div>
+            </motion.div>
+            
             {[
               { icon: TrendingUp, value: '94%', label: 'Trend Analysis', color: 'text-blue-400' },
               { icon: Zap, value: '1.2M', label: 'Real-time Data', color: 'text-purple-400' },
