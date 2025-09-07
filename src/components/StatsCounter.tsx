@@ -38,7 +38,7 @@ export const StatsCounter: React.FC = () => {
   ];
 
   return (
-    <div className="py-20 relative" ref={ref}>
+    <div className="py-12 relative" ref={ref}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Background Elements */}
         <div className="absolute inset-0 flex items-center justify-center">
@@ -61,7 +61,7 @@ export const StatsCounter: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="text-center mb-16"
+            className="text-center mb-10"
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
               <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">

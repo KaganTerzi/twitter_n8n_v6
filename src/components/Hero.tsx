@@ -23,16 +23,16 @@ export const Hero: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center relative px-2 sm:px-4 lg:px-6 xl:px-8 pt-16 overflow-x-hidden">
+    <div className="min-h-screen flex flex-col justify-center items-center relative px-2 sm:px-4 lg:px-6 xl:px-8 pt-16 pb-8 overflow-x-hidden">
       {/* Hero Content */}
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, ease: "easeOut" }}
-        className="text-center max-w-7xl mx-auto mb-8 w-full"
+        className="text-center max-w-7xl mx-auto mb-4 w-full"
       >
         <motion.h1
-          className="text-5xl md:text-7xl xl:text-8xl font-bold mb-6 leading-tight"
+          className="text-5xl md:text-7xl xl:text-8xl font-bold mb-4 leading-tight"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
@@ -45,7 +45,7 @@ export const Hero: React.FC = () => {
         </motion.h1>
 
         <motion.p
-          className={`text-xl md:text-2xl xl:text-3xl ${theme === 'dark' ? 'text-slate-300' : 'text-gray-700'} mb-8 leading-relaxed max-w-5xl mx-auto`}
+          className={`text-xl md:text-2xl xl:text-3xl ${theme === 'dark' ? 'text-slate-300' : 'text-gray-700'} mb-6 leading-relaxed max-w-5xl mx-auto`}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
@@ -58,7 +58,7 @@ export const Hero: React.FC = () => {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className={`glassmorphism p-6 xl:p-8 rounded-2xl mb-8 max-w-4xl mx-auto ${themeColors.border} border`}
+          className={`glassmorphism p-4 xl:p-6 rounded-2xl mb-6 max-w-4xl mx-auto ${themeColors.border} border`}
         >
           <div className="flex items-center justify-center mb-4">
             <motion.div
@@ -90,9 +90,9 @@ export const Hero: React.FC = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.8 }}
-          className={`glassmorphism p-6 xl:p-10 rounded-3xl mb-8 ${themeColors.border} border max-w-6xl mx-auto`}
+          className={`glassmorphism p-4 xl:p-6 rounded-3xl mb-6 ${themeColors.border} border max-w-6xl mx-auto`}
         >
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 xl:gap-10">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 xl:gap-6">
             {[
               { icon: TrendingUp, value: '94%', label: 'Trend Analysis', color: 'text-blue-400' },
               { icon: Zap, value: '1.2M', label: 'Real-time Data', color: 'text-purple-400' },
@@ -107,10 +107,10 @@ export const Hero: React.FC = () => {
                 whileHover={{ scale: 1.05, y: -5 }}
                 className="text-center group"
               >
-                <div className={`w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-r ${themeColors.secondary}/20 flex items-center justify-center group-hover:shadow-lg transition-all duration-300`}>
-                  <stat.icon className={`w-8 h-8 xl:w-10 xl:h-10 ${stat.color}`} />
+                <div className={`w-12 h-12 mx-auto mb-3 rounded-2xl bg-gradient-to-r ${themeColors.secondary}/20 flex items-center justify-center group-hover:shadow-lg transition-all duration-300`}>
+                  <stat.icon className={`w-6 h-6 xl:w-8 xl:h-8 ${stat.color}`} />
                 </div>
-                <div className={`text-3xl xl:text-4xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'} mb-2`}>{stat.value}</div>
+                <div className={`text-2xl xl:text-3xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'} mb-1`}>{stat.value}</div>
                 <div className={`text-sm xl:text-base ${theme === 'dark' ? 'text-slate-300' : 'text-gray-700'}`}>{stat.label}</div>
               </motion.div>
             ))}
