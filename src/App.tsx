@@ -24,10 +24,6 @@ function App() {
             <Hero setActiveSection={setActiveSection} />
             <FeatureGrid />
             <AIAnalytics />
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto px-4 py-16">
-              <TrendRadar />
-              <SentimentGlobe />
-            </div>
             <StatsCounter />
             <PricingSection />
           </>
