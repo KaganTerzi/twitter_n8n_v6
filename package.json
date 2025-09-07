@@ -1,0 +1,48 @@
+{
+  "name": "ai-social-intelligence-platform",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "AI-powered social media intelligence platform with real-time analytics, sentiment analysis, and viral content prediction",
+  "keywords": ["ai", "social-media", "analytics", "react", "typescript", "supabase"],
+  "author": "AI Intel Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/username/ai-social-intelligence-platform.git"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:analyze": "vite build --mode analyze",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "size-check": "npm run build && ls -lh dist/"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.57.2",
+    "chart.js": "^4.5.0",
+    "framer-motion": "^12.23.12",
+    "lucide-react": "^0.344.0",
+    "react": "^18.3.1",
+    "react-chartjs-2": "^5.3.0",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^7.8.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.9.1",
+    "@types/react": "^18.3.24",
+    "@types/react-dom": "^18.3.7",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.18",
+    "eslint": "^9.9.1",
+    "eslint-plugin-react-hooks": "^5.1.0-rc.0",
+    "eslint-plugin-react-refresh": "^0.4.11",
+    "globals": "^15.9.0",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^8.3.0",
+    "vite": "^5.4.2"
+  }
+}
