@@ -89,17 +89,6 @@ export const SocialNews: React.FC = () => {
   const { getThemeColors } = useTheme();
   const themeColors = getThemeColors();
   
-  const [selectedUser, setSelectedUser] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterBy, setFilterBy] = useState<'all' | 'high-engagement' | 'trending' | 'recent' | 'verified' | 'online'>('all');
-  const [categoryFilter, setCategoryFilter] = useState<'all' | 'tech' | 'business' | 'crypto' | 'ai' | 'startup'>('all');
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [users, setUsers] = useState<TwitterUser[]>(mockUsers);
-  const [tweets, setTweets] = useState<Tweet[]>(mockTweets);
-
-  const [errorMessage, setErrorMessage] = useState('');
-
   // Mock data - n8n workflow'undan gelecek gerçek veriler
   const mockUsers: TwitterUser[] = [
     {
@@ -289,6 +278,17 @@ export const SocialNews: React.FC = () => {
       authorId: '4'
     }
   ];
+
+  const [selectedUser, setSelectedUser] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterBy, setFilterBy] = useState<'all' | 'high-engagement' | 'trending' | 'recent' | 'verified' | 'online'>('all');
+  const [categoryFilter, setCategoryFilter] = useState<'all' | 'tech' | 'business' | 'crypto' | 'ai' | 'startup'>('all');
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [users, setUsers] = useState<TwitterUser[]>(mockUsers);
+  const [tweets, setTweets] = useState<Tweet[]>(mockTweets);
+
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
