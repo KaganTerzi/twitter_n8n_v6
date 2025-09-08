@@ -246,15 +246,15 @@ export const AIAnalytics: React.FC = () => {
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.8 }}
-          className="mb-12 max-w-7xl mx-auto"
+          className="pb-12 max-w-7xl mx-auto"
         >
           <div className="flex items-center justify-between mb-6">
             <h3 className={`text-2xl xl:text-3xl font-bold ${themeColors.text}`}>Category Analysis</h3>
             <div className={`text-sm xl:text-base ${themeColors.textSecondary}`}>Click to explore</div>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 xl:gap-6">
-            {categories.map((category, index) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 xl:gap-6">
+            {categories.slice(0, 6).map((category, index) => (
               <motion.div
                 key={category.name}
                 initial={{ opacity: 0, y: 20 }}
@@ -280,7 +280,7 @@ export const AIAnalytics: React.FC = () => {
 
                 {/* Category Header */}
                 <div className="flex items-center justify-between mb-4">
-                  <h4 className={`text-lg xl:text-xl font-bold ${themeColors.text} group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-indigo-400 group-hover:to-purple-400 group-hover:bg-clip-text transition-all duration-300`}>
+                  <h4 className={`text-lg xl:text-xl font-bold ${themeColors.text} group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-indigo-400 group-hover:to-purple-400 group-hover:bg-clip-text transition-all duration-300 truncate`}>
                     {category.name}
                   </h4>
                   <div className={`w-3 h-3 rounded-full bg-gradient-to-r ${category.color}`} />
@@ -301,7 +301,7 @@ export const AIAnalytics: React.FC = () => {
                   </div>
 
                   {/* Sentiment Bar */}
-                  <div className={`w-full ${themeColors.textSecondary === 'text-gray-600' ? 'bg-gray-300' : 'bg-gray-700'} rounded-full h-2`}>
+                  <div className={`w-full ${themeColors.textSecondary === 'text-gray-600' ? 'bg-gray-300' : 'bg-gray-700'} rounded-full h-2 overflow-hidden`}>
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${category.sentiment * 100}%` }}

@@ -29,17 +29,7 @@ function App() {
           </>
         );
       case 'dashboard':
-        return (
-          <div className="pt-20 min-h-screen">
-            <div className="max-w-7xl mx-auto px-4 py-8">
-              <h1 className="text-3xl font-bold mb-8">Dashboard</h1>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <AIAnalytics />
-                <TrendRadar />
-              </div>
-            </div>
-          </div>
-        );
+        return <AIAnalytics />;
       case 'social-news':
         return <SocialNews />;
       case 'youtube-analytics':
@@ -60,7 +50,7 @@ function App() {
 
   return (
     <ThemeProvider>
-      <div className="min-h-screen">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 overflow-x-hidden">
         <Navigation activeSection={activeSection} setActiveSection={setActiveSection} />
         {renderSection()}
       </div>

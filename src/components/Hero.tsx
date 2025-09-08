@@ -21,7 +21,7 @@ export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center relative px-4 sm:px-6 lg:px-8 pt-20 pb-12 overflow-x-hidden">
+    <div className="min-h-screen flex flex-col justify-center items-center relative px-4 sm:px-6 lg:px-8 pt-20 pb-16 overflow-x-hidden">
       {/* Enhanced Background Effects */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Main Glow */}
@@ -83,12 +83,12 @@ export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
       </div>
 
       {/* Hero Content */}
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, ease: "easeOut" }}
-        className="text-center max-w-7xl mx-auto w-full relative z-10"
-      >
+      <div className="text-center max-w-7xl mx-auto w-full relative z-10 px-4 sm:px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+        >
         {/* Main Headline */}
         <motion.h1
           className="text-6xl md:text-8xl lg:text-9xl font-black mb-6 leading-tight tracking-tight"
@@ -148,7 +148,7 @@ export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="relative glassmorphism p-8 rounded-3xl mb-8 border border-white/20 max-w-6xl mx-auto backdrop-blur-xl bg-white/5 shadow-2xl"
+          className="relative glassmorphism p-6 sm:p-8 rounded-3xl mb-8 border border-white/20 w-full max-w-6xl mx-auto backdrop-blur-xl bg-white/5 shadow-2xl overflow-hidden"
         >
           {/* Animated border */}
           <motion.div
@@ -158,7 +158,7 @@ export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
             style={{ padding: '2px' }}
           />
           
-          <div className="grid grid-cols-5 gap-8 relative z-10">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 lg:gap-8 relative z-10">
             {[
               { 
                 icon: Brain, 
@@ -202,7 +202,7 @@ export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
                   y: -8,
                   transition: { duration: 0.2 }
                 }}
-                className={`text-center group cursor-pointer relative p-4 rounded-2xl transition-all duration-300 ${
+                className={`text-center group cursor-pointer relative p-3 sm:p-4 rounded-2xl transition-all duration-300 ${
                   currentMetric === index ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5'
                 }`}
               >
@@ -215,26 +215,26 @@ export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
                   />
                 )}
                 
-                <div className="flex items-center justify-center mb-4 relative z-10">
+                <div className="flex items-center justify-center mb-2 sm:mb-4 relative z-10">
                   {metric.animated ? (
                     <motion.div
                       animate={{ rotate: 360 }}
                       transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
                     >
-                      <metric.icon className={`w-10 h-10 ${metric.color} drop-shadow-lg`} />
+                      <metric.icon className={`w-8 h-8 sm:w-10 sm:h-10 ${metric.color} drop-shadow-lg`} />
                     </motion.div>
                   ) : (
                     <motion.div
                       animate={currentMetric === index ? { scale: [1, 1.2, 1] } : {}}
                       transition={{ duration: 0.5 }}
                     >
-                      <metric.icon className={`w-10 h-10 ${metric.color} drop-shadow-lg`} />
+                      <metric.icon className={`w-8 h-8 sm:w-10 sm:h-10 ${metric.color} drop-shadow-lg`} />
                     </motion.div>
                   )}
                 </div>
                 
                 <motion.div 
-                  className="text-3xl font-black text-white mb-2 drop-shadow-lg relative z-10"
+                  className="text-xl sm:text-2xl lg:text-3xl font-black text-white mb-1 sm:mb-2 drop-shadow-lg relative z-10"
                   animate={currentMetric === index ? { 
                     scale: [1, 1.1, 1],
                     textShadow: [
@@ -248,7 +248,7 @@ export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
                   {metric.value}
                 </motion.div>
                 
-                <div className="text-sm text-gray-300 font-medium relative z-10">
+                <div className="text-xs sm:text-sm text-gray-300 font-medium relative z-10">
                   {metric.label}
                 </div>
               </motion.div>
@@ -271,7 +271,7 @@ export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
             }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setActiveSection('dashboard')}
-            className="px-12 py-5 bg-gradient-to-r from-blue-600 via-blue-500 to-purple-600 text-white rounded-2xl font-black text-xl shadow-2xl hover:shadow-blue-500/50 transition-all duration-300 flex items-center space-x-3 relative overflow-hidden group"
+            className="w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-5 bg-gradient-to-r from-blue-600 via-blue-500 to-purple-600 text-white rounded-2xl font-black text-lg sm:text-xl shadow-2xl hover:shadow-blue-500/50 transition-all duration-300 flex items-center justify-center space-x-3 relative overflow-hidden group"
           >
             {/* Enhanced shimmer effect */}
             <motion.div
@@ -296,13 +296,13 @@ export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
               backgroundColor: 'rgba(255, 255, 255, 0.15)'
             }}
             whileTap={{ scale: 0.95 }}
-            className="px-12 py-5 glassmorphism rounded-2xl font-black text-xl border-2 border-white/30 hover:border-white/60 transition-all duration-300 flex items-center space-x-3 text-white bg-white/10 hover:bg-white/20 backdrop-blur-xl shadow-xl"
+            className="w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-5 glassmorphism rounded-2xl font-black text-lg sm:text-xl border-2 border-white/30 hover:border-white/60 transition-all duration-300 flex items-center justify-center space-x-3 text-white bg-white/10 hover:bg-white/20 backdrop-blur-xl shadow-xl"
           >
             <motion.div
               animate={{ scale: [1, 1.1, 1] }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              <Play className="w-6 h-6" />
+              <Play className="w-5 h-5 sm:w-6 sm:h-6" />
             </motion.div>
             <span>Watch Demo</span>
           </motion.button>
@@ -313,7 +313,7 @@ export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 1.4 }}
-          className="flex items-center justify-center space-x-8 text-base font-medium"
+          className="flex flex-col sm:flex-row items-center justify-center space-y-3 sm:space-y-0 sm:space-x-8 text-sm sm:text-base font-medium"
         >
           {[
             { color: 'bg-green-500', text: '99.9% Uptime', animated: true },
@@ -339,7 +339,8 @@ export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
             </motion.div>
           ))}
         </motion.div>
-      </motion.div>
+        </motion.div>
+      </div>
     </div>
   );
 };
