@@ -95,6 +95,8 @@ export const SocialNews: React.FC = () => {
   const [categoryFilter, setCategoryFilter] = useState<'all' | 'tech' | 'business' | 'crypto' | 'ai' | 'startup'>('all');
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [users, setUsers] = useState<TwitterUser[]>(mockUsers);
+  const [tweets, setTweets] = useState<Tweet[]>(mockTweets);
 
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -293,13 +295,70 @@ export const SocialNews: React.FC = () => {
     setErrorMessage('');
     
     try {
-      // Trigger N8N webhook through our API
       const result = await triggerN8NWebhook();
       
       console.log('N8N webhook triggered successfully:', result);
       
-      // Optionally refresh local data here
-      // await refreshLocalData();
+      // N8N'den gelen veriyi parse et
+      if (result.data) {
+        try {
+          const n8nData = typeof result.data === 'string' ? JSON.parse(result.data) : result.data;
+          
+          // Kullanıcıları güncelle
+          if (n8nData.users && Array.isArray(n8nData.users)) {
+            const updatedUsers = n8nData.users.map((user: any) => ({
+              id: user.id || user.user_id || Math.random().toString(),
+              username: user.username || user.screen_name || '',
+              displayName: user.display_name || user.name || user.username || '',
+              avatar: user.profile_image_url || user.avatar || 'https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&cs=tinysrgb&w=150',
+              verified: user.verified || false,
+              followers: user.followers_count || user.followers || 0,
+              following: user.following_count || user.following || 0,
+              location: user.location || '',
+              bio: user.description || user.bio || '',
+              website: user.url || user.website || '',
+              joinDate: user.created_at || new Date().toISOString(),
+              stats: {
+                totalTweets: user.statuses_count || user.tweet_count || 0,
+                avgEngagement: user.engagement_rate || Math.random() * 10,
+                sentimentTrend: user.sentiment_trend || 'stable',
+                viralPotential: user.viral_potential || Math.floor(Math.random() * 100),
+                influence: user.influence_score || Math.floor(Math.random() * 100)
+              },
+              category: user.category || 'tech',
+              isOnline: user.is_online !== undefined ? user.is_online : Math.random() > 0.5,
+              lastActive: user.last_active || (Math.random() > 0.5 ? 'now' : `${Math.floor(Math.random() * 60)} min ago`)
+            }));
+            setUsers(updatedUsers);
+          }
+          
+          // Tweet'leri güncelle
+          if (n8nData.tweets && Array.isArray(n8nData.tweets)) {
+            const updatedTweets = n8nData.tweets.map((tweet: any) => ({
+              id: tweet.id || tweet.tweet_id || Math.random().toString(),
+              content: tweet.text || tweet.content || '',
+              timestamp: formatTimeAgo(new Date(tweet.created_at || Date.now())),
+              likes: tweet.favorite_count || tweet.likes || 0,
+              retweets: tweet.retweet_count || tweet.retweets || 0,
+              replies: tweet.reply_count || tweet.replies || 0,
+              views: tweet.view_count || tweet.views || Math.floor(Math.random() * 10000),
+              sentiment: tweet.sentiment_score || Math.random(),
+              viralScore: tweet.viral_score || Math.floor(Math.random() * 100),
+              hashtags: tweet.hashtags || [],
+              mentions: tweet.mentions || [],
+              media: tweet.media || [],
+              engagement: tweet.engagement_rate || Math.random() * 10,
+              authorId: tweet.user_id || tweet.author_id || '1',
+              location: tweet.location || ''
+            }));
+            setTweets(updatedTweets);
+          }
+          
+        } catch (parseError) {
+          console.error('Error parsing N8N data:', parseError);
+          // Fallback: sadece mock data'yı kullan
+        }
+      }
       
     } catch (error) {
       console.error('Error triggering N8N webhook:', error);
@@ -309,7 +368,18 @@ export const SocialNews: React.FC = () => {
     setIsRefreshing(false);
   };
 
-  const filteredUsers = mockUsers.filter(user => {
+  // Helper function for time formatting
+  const formatTimeAgo = (date: Date): string => {
+    const now = new Date();
+    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+    
+    if (diffInSeconds < 60) return `${diffInSeconds}s ago`;
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
+    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
+    return `${Math.floor(diffInSeconds / 86400)}d ago`;
+  };
+
+  const filteredUsers = users.filter(user => {</parameter>
     const matchesSearch = user.displayName.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          user.username.toLowerCase().includes(searchTerm.toLowerCase());
     
@@ -494,18 +564,27 @@ export const SocialNews: React.FC = () => {
                       whileHover={{ scale: 1.02, y: -2 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => setSelectedUser(user.id)}
-                      className={`p-4 rounded-xl cursor-pointer transition-all duration-300 group ${
+                      className={`p-4 rounded-xl cursor-pointer transition-all duration-300 group relative ${
                         selectedUser === user.id
                           ? `bg-gradient-to-r ${themeColors.secondary}/20 border-2 border-white/30 shadow-lg`
-                          : 'glassmorphism-dark hover:bg-white/10 border border-white/10 hover:border-white/20'
+                          : `glassmorphism-dark hover:bg-white/10 border border-white/10 hover:border-white/20 ${
+                              !user.isOnline ? 'opacity-60' : ''
+                            }`
                       }`}
                     >
+                      {/* Offline overlay */}
+                      {!user.isOnline && (
+                        <div className="absolute inset-0 bg-gray-900/30 rounded-xl pointer-events-none" />
+                      )}
+                      
                       <div className="flex items-start space-x-3">
                         <div className="relative">
                           <img
                             src={user.avatar}
                             alt={user.displayName}
-                            className="w-12 h-12 rounded-full object-cover shadow-lg"
+                            className={`w-12 h-12 rounded-full object-cover shadow-lg ${
+                              !user.isOnline ? 'grayscale' : ''
+                            }`}
                           />
                           {user.verified && (
                             <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center shadow-lg">
@@ -515,19 +594,28 @@ export const SocialNews: React.FC = () => {
                           {user.isOnline && (
                             <div className="absolute -top-1 -left-1 w-4 h-4 bg-green-500 rounded-full border-2 border-gray-900"></div>
                           )}
+                          {!user.isOnline && (
+                            <div className="absolute -top-1 -left-1 w-4 h-4 bg-gray-500 rounded-full border-2 border-gray-900"></div>
+                          )}
                         </div>
                         
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between mb-1">
-                            <h3 className="font-semibold text-white truncate text-sm">{user.displayName}</h3>
+                            <h3 className={`font-semibold truncate text-sm ${
+                              user.isOnline ? 'text-white' : 'text-gray-400'
+                            }`}>{user.displayName}</h3>
                             <div className={`p-1 rounded-lg bg-gradient-to-r ${getCategoryColor(user.category)}`}>
                               <CategoryIcon className="w-3 h-3 text-white" />
                             </div>
                           </div>
-                          <p className="text-xs text-gray-400 mb-2">@{user.username}</p>
+                          <p className={`text-xs mb-2 ${
+                            user.isOnline ? 'text-gray-400' : 'text-gray-500'
+                          }`}>@{user.username}</p>
                           
                           <div className="flex items-center justify-between text-xs mb-2">
-                            <span className="text-gray-500">{formatNumber(user.followers)} followers</span>
+                            <span className={user.isOnline ? 'text-gray-500' : 'text-gray-600'}>
+                              {formatNumber(user.followers)} followers
+                            </span>
                             <div className={`px-2 py-1 rounded-full bg-gradient-to-r ${getViralScoreColor(user.stats.viralPotential)} text-white font-bold text-xs`}>
                               {user.stats.viralPotential}%
                             </div>
@@ -581,8 +669,8 @@ export const SocialNews: React.FC = () => {
                   </div>
                   
                   <div className="space-y-6">
-                    {mockTweets.map((tweet, index) => {
-                      const author = mockUsers.find(u => u.id === tweet.authorId);
+                    {tweets.map((tweet, index) => {
+                      const author = users.find(u => u.id === tweet.authorId);
                       if (!author) return null;
                       
                       return (
@@ -844,7 +932,13 @@ export const SocialNews: React.FC = () => {
                         </div>
                         
                         <div className="space-y-6">
-                          {mockTweets.filter(t => t.authorId === user.id).map((tweet, index) => (
+                          {tweets.filter(t => t.authorId === user.id && {
+                            // Son 24 saat içindeki tweet'leri filtrele
+                            const tweetDate = new Date();
+                            const now = new Date();
+                            const diffInHours = (now.getTime() - tweetDate.getTime()) / (1000 * 60 * 60);
+                            return diffInHours <= 24;
+                          }).slice(0, 10).map((tweet, index) => (</parameter>
                             <motion.div
                               key={tweet.id}
                               initial={{ opacity: 0, x: -20 }}
