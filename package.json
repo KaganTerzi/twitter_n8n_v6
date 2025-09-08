@@ -4,7 +4,14 @@
   "version": "1.0.0",
   "type": "module",
   "description": "AI-powered social media intelligence platform with real-time analytics, sentiment analysis, and viral content prediction",
-  "keywords": ["ai", "social-media", "analytics", "react", "typescript", "supabase"],
+  "keywords": [
+    "ai",
+    "social-media",
+    "analytics",
+    "react",
+    "typescript",
+    "supabase"
+  ],
   "author": "AI Intel Team",
   "license": "MIT",
   "repository": {
@@ -21,6 +28,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.57.2",
+    "@types/node": "^24.3.1",
     "chart.js": "^4.5.0",
     "framer-motion": "^12.23.12",
     "lucide-react": "^0.344.0",

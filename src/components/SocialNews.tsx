@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { triggerN8NWebhook } from '../api/webhook';
 import { 
   Users, 
   MessageSquare, 
@@ -94,6 +95,8 @@ export const SocialNews: React.FC = () => {
   const [categoryFilter, setCategoryFilter] = useState<'all' | 'tech' | 'business' | 'crypto' | 'ai' | 'startup'>('all');
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+
+  const [errorMessage, setErrorMessage] = useState('');
 
   // Mock data - n8n workflow'undan gelecek gerçek veriler
   const mockUsers: TwitterUser[] = [
@@ -287,24 +290,20 @@ export const SocialNews: React.FC = () => {
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
+    setErrorMessage('');
     
     try {
-      // Trigger N8N webhook
-      const response = await fetch('https://n8nautomationbolt.app.n8n.cloud/webhook-test/twitter-collect', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({})
-      });
+      // Trigger N8N webhook through our API
+      const result = await triggerN8NWebhook();
       
-      if (response.ok) {
-        console.log('N8N webhook triggered successfully');
-      } else {
-        console.error('Webhook failed:', response.status);
-      }
+      console.log('N8N webhook triggered successfully:', result);
+      
+      // Optionally refresh local data here
+      // await refreshLocalData();
+      
     } catch (error) {
-      console.error('Error triggering webhook:', error);
+      console.error('Error triggering N8N webhook:', error);
+      setErrorMessage('Failed to update data. Please try again.');
     }
     
     setIsRefreshing(false);
@@ -457,6 +456,17 @@ export const SocialNews: React.FC = () => {
                     <div className="text-sm opacity-75">Combined feed</div>
                   </div>
                 </div>
+                
+                {/* Error Message */}
+                {errorMessage && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-4 p-4 bg-red-500/20 border border-red-500/30 rounded-xl text-red-400"
+                  >
+                    {errorMessage}
+                  </motion.div>
+                )}
               </motion.button>
 
               {/* Stats Summary */}
