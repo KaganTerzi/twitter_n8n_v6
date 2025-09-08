@@ -1,7 +1,7 @@
 // N8N Webhook API functions
 export const triggerN8NWebhook = async () => {
   try {
-    const response = await fetch('/api/trigger-webhook', {
+    const response = await fetch('https://n8nautomationbolt.app.n8n.cloud/webhook/twitter-collect', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -16,8 +16,8 @@ export const triggerN8NWebhook = async () => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const data = await response.json();
-    return data;
+    const data = await response.text(); // N8N webhooks often return plain text
+    return { success: true, data };
   } catch (error) {
     console.error('Error triggering N8N webhook:', error);
     throw error;
