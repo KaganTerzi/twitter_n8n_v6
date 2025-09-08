@@ -287,8 +287,26 @@ export const SocialNews: React.FC = () => {
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    try {
+      // Trigger N8N webhook
+      const response = await fetch('https://n8nautomationbolt.app.n8n.cloud/webhook-test/twitter-collect', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({})
+      });
+      
+      if (response.ok) {
+        console.log('N8N webhook triggered successfully');
+      } else {
+        console.error('Webhook failed:', response.status);
+      }
+    } catch (error) {
+      console.error('Error triggering webhook:', error);
+    }
+    
     setIsRefreshing(false);
   };
 
