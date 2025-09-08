@@ -5,12 +5,10 @@ import { SentimentGlobe } from './SentimentGlobe';
 import { TrendRadar } from './TrendRadar';
 import { CategoryModal } from './CategoryModal';
 import { useTheme } from '../contexts/ThemeContext';
-import { useLanguage } from '../contexts/LanguageContext';
 import { useSocialData } from '../hooks/useSocialData';
 
 export const AIAnalytics: React.FC = () => {
   const { getThemeColors } = useTheme();
-  const { t } = useLanguage();
   const themeColors = getThemeColors();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [aiStatus, setAiStatus] = useState<'analyzing' | 'complete' | 'idle'>('analyzing');
@@ -142,11 +140,11 @@ export const AIAnalytics: React.FC = () => {
         >
           <h1 className="text-4xl md:text-6xl xl:text-7xl font-bold mb-6">
             <span className={`bg-gradient-to-r ${themeColors.accent} bg-clip-text text-transparent`}>
-              {t('ai.title')}
+              AI Command Center
             </span>
           </h1>
           <p className={`text-xl xl:text-2xl ${themeColors.textSecondary} max-w-4xl mx-auto`}>
-            {t('ai.subtitle')}
+            Real-time social media intelligence at your fingertips
           </p>
         </motion.div>
 
@@ -182,7 +180,7 @@ export const AIAnalytics: React.FC = () => {
               </motion.div>
             </div>
             <div className={`text-2xl xl:text-3xl font-bold ${themeColors.text} mb-1`}>AI</div>
-            <div className={`text-sm xl:text-base ${themeColors.textSecondary}`}>{t('ai.analyzing')}</div>
+            <div className={`text-sm xl:text-base ${themeColors.textSecondary}`}>Analyzing</div>
           </motion.div>
           
           {metrics.map((metric, index) => (
@@ -218,9 +216,9 @@ export const AIAnalytics: React.FC = () => {
             <div className="flex items-center justify-between mb-6">
               <h3 className={`text-xl xl:text-2xl font-bold ${themeColors.text} flex items-center`}>
                 <Globe className="w-6 h-6 xl:w-8 xl:h-8 mr-2 text-cyan-400" />
-                {t('ai.globalSentiment')}
+                Global Sentiment
               </h3>
-              <div className={`text-sm xl:text-base ${themeColors.textSecondary}`}>{t('ai.liveData')}</div>
+              <div className={`text-sm xl:text-base ${themeColors.textSecondary}`}>Live Data</div>
             </div>
             <SentimentGlobe />
           </motion.div>
@@ -235,9 +233,9 @@ export const AIAnalytics: React.FC = () => {
             <div className="flex items-center justify-between mb-6">
               <h3 className={`text-xl xl:text-2xl font-bold ${themeColors.text} flex items-center`}>
                 <TrendingUp className="w-6 h-6 xl:w-8 xl:h-8 mr-2 text-purple-400" />
-                {t('ai.viralRadar')}
+                Viral Radar
               </h3>
-              <div className={`text-sm xl:text-base ${themeColors.textSecondary}`}>{t('ai.nextHours')}</div>
+              <div className={`text-sm xl:text-base ${themeColors.textSecondary}`}>Next 6 Hours</div>
             </div>
             <TrendRadar />
           </motion.div>
@@ -251,8 +249,8 @@ export const AIAnalytics: React.FC = () => {
           className="mb-12 max-w-7xl mx-auto"
         >
           <div className="flex items-center justify-between mb-6">
-            <h3 className={`text-2xl xl:text-3xl font-bold ${themeColors.text}`}>{t('ai.categoryAnalysis')}</h3>
-            <div className={`text-sm xl:text-base ${themeColors.textSecondary}`}>{t('ai.clickExplore')}</div>
+            <h3 className={`text-2xl xl:text-3xl font-bold ${themeColors.text}`}>Category Analysis</h3>
+            <div className={`text-sm xl:text-base ${themeColors.textSecondary}`}>Click to explore</div>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 xl:gap-6">
