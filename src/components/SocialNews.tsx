@@ -379,7 +379,7 @@ export const SocialNews: React.FC = () => {
     return `${Math.floor(diffInSeconds / 86400)}d ago`;
   };
 
-  const filteredUsers = users.filter(user => {</parameter>
+  const filteredUsers = users.filter(user => {
     const matchesSearch = user.displayName.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          user.username.toLowerCase().includes(searchTerm.toLowerCase());
     
