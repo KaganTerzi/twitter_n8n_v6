@@ -543,31 +543,7 @@ export const SocialNews: React.FC = () => {
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      onClick={async () => {
-                        try {
-                          setIsRefreshing(true);
-                          const response = await fetch('https://clerkvespike.app.n8n.cloud/webhook/twitter-collect', {
-                            method: 'POST',
-                            headers: {
-                              'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                              trigger: 'manual',
-                              timestamp: new Date().toISOString()
-                            })
-                          });
-                          
-                          if (response.ok) {
-                            // Simulate data refresh
-                            await new Promise(resolve => setTimeout(resolve, 2000));
-                            console.log('Webhook triggered successfully');
-                          }
-                        } catch (error) {
-                          console.error('Webhook error:', error);
-                        } finally {
-                          setIsRefreshing(false);
-                        }
-                      }}
+                      onClick={handleRefresh}
                       disabled={isRefreshing}
                       className={`px-6 py-3 bg-gradient-to-r ${themeColors.secondary} text-white rounded-xl font-semibold flex items-center space-x-2 shadow-lg disabled:opacity-50`}
                     >
