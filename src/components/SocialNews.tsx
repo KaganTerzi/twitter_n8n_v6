@@ -768,15 +768,41 @@ export const SocialNews: React.FC = () => {
                               
                               <p className="text-gray-300 mb-4 leading-relaxed text-lg">{tweet.content}</p>
                               
+                              {/* Media Display */}
+                              {tweet.media_urls && tweet.media_urls.length > 0 && (
+                                <div className="mb-4">
+                                  <div className="grid grid-cols-1 gap-3">
+                                    {tweet.media_urls.slice(0, 2).map((mediaUrl, i) => (
+                                      <div key={i} className="relative rounded-xl overflow-hidden">
+                                        {mediaUrl.includes('video') || mediaUrl.includes('.mp4') ? (
+                                          <video 
+                                            src={mediaUrl} 
+                                            controls 
+                                            className="w-full h-48 object-cover bg-gray-800"
+                                            poster="https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=400"
+                                          />
+                                        ) : (
+                                          <img 
+                                            src={mediaUrl || 'https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=400'} 
+                                            alt="Tweet media" 
+                                            className="w-full h-48 object-cover"
+                                          />
+                                        )}
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+
                               {tweet.hashtags.length > 0 && (
                                 <div className="flex flex-wrap gap-2 mb-4">
                                   {tweet.hashtags.map((hashtag, i) => (
                                     <motion.span
                                       key={i}
                                       whileHover={{ scale: 1.05 }}
-                                      className="text-blue-400 hover:text-blue-300 cursor-pointer font-medium text-sm"
+                                      className="px-3 py-1 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-300 rounded-full text-sm font-semibold border border-blue-500/30 hover:border-blue-400/50 cursor-pointer transition-all duration-300"
                                     >
-                                      {hashtag}
+                                      #{hashtag}
                                     </motion.span>
                                   ))}
                                 </div>
@@ -997,7 +1023,7 @@ export const SocialNews: React.FC = () => {
                         <div className="space-y-6">
                           {tweets.filter(t => {
                             // Son 24 saat içindeki tweet'leri filtrele
-                            const tweetDate = new Date();
+                            const tweetDate = new Date(t.posted_at);
                             const now = new Date();
                             const diffInHours = (now.getTime() - tweetDate.getTime()) / (1000 * 60 * 60);
                             return t.authorId === user.id && diffInHours <= 24;
@@ -1031,15 +1057,42 @@ export const SocialNews: React.FC = () => {
                               
                               <p className="text-gray-300 mb-6 leading-relaxed text-xl">{tweet.content}</p>
                               
+                              {/* Media Display for Individual User View */}
+                              {tweet.media_urls && tweet.media_urls.length > 0 && (
+                                <div className="mb-6">
+                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {tweet.media_urls.slice(0, 4).map((mediaUrl, i) => (
+                                      <div key={i} className="relative rounded-xl overflow-hidden group">
+                                        {mediaUrl.includes('video') || mediaUrl.includes('.mp4') ? (
+                                          <video 
+                                            src={mediaUrl} 
+                                            controls 
+                                            className="w-full h-64 object-cover bg-gray-800 group-hover:scale-105 transition-transform duration-300"
+                                            poster="https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=400"
+                                          />
+                                        ) : (
+                                          <img 
+                                            src={mediaUrl || 'https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=400'} 
+                                            alt="Tweet media" 
+                                            className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                                          />
+                                        )}
+                                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300" />
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+
                               {tweet.hashtags.length > 0 && (
                                 <div className="flex flex-wrap gap-3 mb-6">
                                   {tweet.hashtags.map((hashtag, i) => (
                                     <motion.span
                                       key={i}
                                       whileHover={{ scale: 1.05 }}
-                                      className="text-blue-400 hover:text-blue-300 cursor-pointer font-medium text-lg"
+                                      className="px-4 py-2 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-300 rounded-full text-lg font-semibold border border-blue-500/30 hover:border-blue-400/50 cursor-pointer transition-all duration-300 shadow-lg"
                                     >
-                                      {hashtag}
+                                      #{hashtag}
                                     </motion.span>
                                   ))}
                                 </div>
