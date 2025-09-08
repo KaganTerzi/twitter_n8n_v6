@@ -21,7 +21,7 @@ export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center relative px-4 sm:px-6 lg:px-8 pt-16 pb-8 overflow-x-hidden">
+    <div className="min-h-screen flex flex-col justify-center items-center relative px-4 sm:px-6 lg:px-8 pt-20 pb-12 overflow-x-hidden">
       {/* Enhanced Background Effects */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Main Glow */}
@@ -91,7 +91,7 @@ export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
       >
         {/* Main Headline */}
         <motion.h1
-          className="text-6xl md:text-8xl lg:text-9xl font-black mb-4 leading-tight tracking-tight"
+          className="text-6xl md:text-8xl lg:text-9xl font-black mb-6 leading-tight tracking-tight"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
@@ -130,7 +130,7 @@ export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
 
         {/* Enhanced Subtitle */}
         <motion.p
-          className="text-xl md:text-2xl lg:text-3xl text-gray-300 mb-6 leading-relaxed max-w-5xl mx-auto font-semibold"
+          className="text-xl md:text-2xl lg:text-3xl text-gray-300 mb-8 leading-relaxed max-w-5xl mx-auto font-semibold"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
@@ -148,7 +148,7 @@ export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="relative glassmorphism p-8 rounded-3xl mb-6 border border-white/20 max-w-6xl mx-auto backdrop-blur-xl bg-white/5 shadow-2xl"
+          className="relative glassmorphism p-8 rounded-3xl mb-8 border border-white/20 max-w-6xl mx-auto backdrop-blur-xl bg-white/5 shadow-2xl"
         >
           {/* Animated border */}
           <motion.div
