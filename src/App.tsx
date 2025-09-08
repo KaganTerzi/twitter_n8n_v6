@@ -50,7 +50,7 @@ function App() {
 
   return (
     <ThemeProvider>
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 overflow-x-hidden">
+      <div className="min-h-screen bg-[var(--bg)] overflow-x-hidden">
         <Navigation activeSection={activeSection} setActiveSection={setActiveSection} />
         {renderSection()}
       </div>

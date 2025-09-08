@@ -43,7 +43,23 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const setTheme = (newTheme: 'dark' | 'light') => {
     setCurrentTheme(newTheme);
     localStorage.setItem('theme', newTheme);
+    
+    // Update HTML class for CSS variables
+    if (newTheme === 'light') {
+      document.documentElement.classList.add('theme-light');
+    } else {
+      document.documentElement.classList.remove('theme-light');
+    }
   };
+
+  // Apply theme class on mount
+  React.useEffect(() => {
+    if (theme === 'light') {
+      document.documentElement.classList.add('theme-light');
+    } else {
+      document.documentElement.classList.remove('theme-light');
+    }
+  }, [theme]);
 
   const getThemeColors = () => {
     if (theme === 'light') {

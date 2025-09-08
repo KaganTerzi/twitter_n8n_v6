@@ -143,7 +143,7 @@ export const AIAnalytics: React.FC = () => {
               AI Command Center
             </span>
           </h1>
-          <p className={`text-xl xl:text-2xl ${themeColors.textSecondary} max-w-4xl mx-auto`}>
+          <p className="text-xl xl:text-2xl text-[var(--muted)] max-w-4xl mx-auto">
             Real-time social media intelligence at your fingertips
           </p>
         </motion.div>

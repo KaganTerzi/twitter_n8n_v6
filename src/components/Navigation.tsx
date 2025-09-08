@@ -28,7 +28,7 @@ export const Navigation: React.FC<NavigationProps> = ({ activeSection, setActive
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/10 border-b border-white/20"
+        className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-[var(--card)] border-b border-[var(--border)]"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-14">
@@ -38,7 +38,7 @@ export const Navigation: React.FC<NavigationProps> = ({ activeSection, setActive
               className="flex items-center space-x-3"
             >
               <div className="relative">
-                <Brain className={`h-8 w-8 ${themeColors.text}`} />
+                <Brain className="h-8 w-8 text-[var(--text)]" />
                 <motion.div
                   className={`absolute inset-0 bg-gradient-to-r ${themeColors.accent} opacity-30 rounded-full blur-lg`}
                   animate={{ scale: [1, 1.2, 1] }}
@@ -60,8 +60,8 @@ export const Navigation: React.FC<NavigationProps> = ({ activeSection, setActive
                   whileTap={{ scale: 0.95 }}
                   className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-300 ${
                     activeSection === item.id
-                      ? `glassmorphism shadow-lg border border-white/20 text-white dark:text-white light:text-gray-900`
-                      : `text-gray-300 hover:text-white dark:hover:text-white light:hover:text-gray-900 hover:glassmorphism`
+                      ? `glassmorphism shadow-lg border border-[var(--border)] text-[var(--text)]`
+                      : `text-[var(--muted)] hover:text-[var(--text)] hover:glassmorphism`
                   }`}
                 >
                   <item.icon className="h-4 w-4" />
@@ -74,7 +74,7 @@ export const Navigation: React.FC<NavigationProps> = ({ activeSection, setActive
                 onClick={toggleTheme}
                 whileHover={{ rotate: 180 }}
                 whileTap={{ scale: 0.9 }}
-                className="p-2 rounded-lg glassmorphism hover:shadow-lg transition-all duration-300 border border-white/20 text-white dark:text-white light:text-gray-900"
+                className="p-2 rounded-lg glassmorphism hover:shadow-lg transition-all duration-300 border border-[var(--border)] text-[var(--text)]"
               >
                 {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
               </motion.button>

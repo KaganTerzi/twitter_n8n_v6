@@ -2,6 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --bg: #0b1e3a;
+  --card: #0f2346;
+  --text: #eaf2ff;
+  --muted: #9fb3d1;
+  --border: rgba(255,255,255,.06);
+}
+
+.theme-light {
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --text: #0f172a;
+  --muted: #475569;
+  --border: rgba(2,6,23,.08);
+}
+
 @layer utilities {
   /* Dark theme glassmorphism */
   .dark .glassmorphism {

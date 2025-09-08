@@ -130,7 +130,7 @@ export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
 
         {/* Enhanced Subtitle */}
         <motion.p
-          className="text-xl md:text-2xl lg:text-3xl text-gray-300 mb-8 leading-relaxed max-w-5xl mx-auto font-semibold"
+          className="text-xl md:text-2xl lg:text-3xl text-[var(--muted)] mb-8 leading-relaxed max-w-5xl mx-auto font-semibold"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
@@ -148,7 +148,7 @@ export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="relative glassmorphism p-6 sm:p-8 rounded-3xl mb-8 border border-white/20 w-full max-w-6xl mx-auto backdrop-blur-xl bg-white/5 shadow-2xl overflow-hidden"
+          className="relative glassmorphism p-6 sm:p-8 rounded-3xl mb-8 border border-[var(--border)] w-full max-w-6xl mx-auto backdrop-blur-xl bg-[var(--card)] shadow-2xl overflow-hidden"
         >
           {/* Animated border */}
           <motion.div
@@ -234,7 +234,7 @@ export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
                 </div>
                 
                 <motion.div 
-                  className="text-xl sm:text-2xl lg:text-3xl font-black text-white mb-1 sm:mb-2 drop-shadow-lg relative z-10"
+                  className="text-xl sm:text-2xl lg:text-3xl font-black text-[var(--text)] mb-1 sm:mb-2 drop-shadow-lg relative z-10"
                   animate={currentMetric === index ? { 
                     scale: [1, 1.1, 1],
                     textShadow: [
@@ -248,7 +248,7 @@ export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
                   {metric.value}
                 </motion.div>
                 
-                <div className="text-xs sm:text-sm text-gray-300 font-medium relative z-10">
+                <div className="text-xs sm:text-sm text-[var(--muted)] font-medium relative z-10">
                   {metric.label}
                 </div>
               </motion.div>
