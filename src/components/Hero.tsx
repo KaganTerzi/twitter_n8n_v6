@@ -80,7 +80,6 @@ export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
             }}
           />
         ))}
-        />
       </div>
 
       {/* Hero Content */}
