@@ -932,13 +932,13 @@ export const SocialNews: React.FC = () => {
                         </div>
                         
                         <div className="space-y-6">
-                          {tweets.filter(t => t.authorId === user.id && {
+                          {tweets.filter(t => {
                             // Son 24 saat içindeki tweet'leri filtrele
                             const tweetDate = new Date();
                             const now = new Date();
                             const diffInHours = (now.getTime() - tweetDate.getTime()) / (1000 * 60 * 60);
-                            return diffInHours <= 24;
-                          }).slice(0, 10).map((tweet, index) => (</parameter>
+                            return t.authorId === user.id && diffInHours <= 24;
+                          }).slice(0, 10).map((tweet, index) => (
                             <motion.div
                               key={tweet.id}
                               initial={{ opacity: 0, x: -20 }}
