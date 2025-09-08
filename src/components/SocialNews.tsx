@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { triggerN8NWebhook } from '../api/webhook';
 import { 
   Users, 
   MessageSquare, 
@@ -41,6 +40,33 @@ import {
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
+// N8N webhook function
+const triggerN8NWebhook = async () => {
+  try {
+    const response = await fetch('https://n8nautomationbolt.app.n8n.cloud/webhook/twitter-collect', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        timestamp: new Date().toISOString(),
+        source: 'socialnews-frontend',
+        action: 'fetch_latest_data'
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return { success: true, data };
+  } catch (error) {
+    console.error('Error triggering N8N webhook:', error);
+    throw error;
+  }
+};
+
 interface TwitterUser {
   id: string;
   username: string;
@@ -63,12 +89,16 @@ interface TwitterUser {
   category: string;
   isOnline: boolean;
   lastActive: string;
+  lastTweetTime?: string;
 }
 
 interface Tweet {
   id: string;
+  platform: string;
+  post_id: string;
   content: string;
   timestamp: string;
+  posted_at: string;
   likes: number;
   retweets: number;
   replies: number;
@@ -77,12 +107,16 @@ interface Tweet {
   viralScore: number;
   hashtags: string[];
   mentions: string[];
-  media?: string[];
+  media_urls?: string[];
   isRetweet?: boolean;
   originalAuthor?: string;
   location?: string;
   engagement: number;
   authorId: string;
+  author_username: string;
+  author_name: string;
+  url?: string;
+  raw_data?: any;
 }
 
 export const SocialNews: React.FC = () => {
@@ -290,6 +324,84 @@ export const SocialNews: React.FC = () => {
 
   const [errorMessage, setErrorMessage] = useState('');
 
+  // N8N'den gelen veriyi parse etme fonksiyonu
+  const parseN8NData = (rawData: any) => {
+    try {
+      // Eğer data array ise, her bir tweet'i parse et
+      if (Array.isArray(rawData)) {
+        const parsedTweets: Tweet[] = [];
+        const userMap = new Map<string, TwitterUser>();
+
+        rawData.forEach((item: any) => {
+          // Tweet verisi
+          const tweet: Tweet = {
+            id: item.post_id || Math.random().toString(),
+            platform: item.platform || 'twitter',
+            post_id: item.post_id || '',
+            content: item.content || '',
+            timestamp: formatTimeAgo(new Date(item.posted_at || Date.now())),
+            posted_at: item.posted_at || new Date().toISOString(),
+            likes: item.likes_count || 0,
+            retweets: item.retweets_count || 0,
+            replies: item.replies_count || 0,
+            views: Math.floor(Math.random() * 10000), // N8N'de view count yoksa random
+            sentiment: Math.random(), // Sentiment analizi eklenebilir
+            viralScore: Math.min(((item.likes_count || 0) + (item.retweets_count || 0)) / 10, 100),
+            hashtags: item.hashtags || [],
+            mentions: [],
+            media_urls: item.media_urls || [],
+            engagement: ((item.likes_count || 0) + (item.retweets_count || 0) + (item.replies_count || 0)) / Math.max(item.likes_count || 1, 1) * 100,
+            authorId: item.author_username || '',
+            author_username: item.author_username || '',
+            author_name: item.author_name || '',
+            url: item.url || '',
+            raw_data: item.raw_data || {}
+          };
+          parsedTweets.push(tweet);
+
+          // Kullanıcı verisi oluştur
+          if (item.author_username && !userMap.has(item.author_username)) {
+            const user: TwitterUser = {
+              id: item.author_username,
+              username: item.author_username,
+              displayName: item.author_name || item.author_username,
+              avatar: `https://images.pexels.com/photos/${Math.floor(Math.random() * 1000000)}/pexels-photo-${Math.floor(Math.random() * 1000000)}.jpeg?auto=compress&cs=tinysrgb&w=150`,
+              verified: Math.random() > 0.7, // %30 verified
+              followers: Math.floor(Math.random() * 100000) + 1000,
+              following: Math.floor(Math.random() * 5000) + 100,
+              location: 'Turkey',
+              bio: `${item.author_name || item.author_username} - Content Creator`,
+              website: '',
+              joinDate: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000).toISOString(),
+              stats: {
+                totalTweets: Math.floor(Math.random() * 10000) + 100,
+                avgEngagement: Math.random() * 10,
+                sentimentTrend: ['up', 'down', 'stable'][Math.floor(Math.random() * 3)] as 'up' | 'down' | 'stable',
+                viralPotential: Math.floor(Math.random() * 100),
+                influence: Math.floor(Math.random() * 100)
+              },
+              category: ['tech', 'business', 'ai', 'startup'][Math.floor(Math.random() * 4)],
+              isOnline: Math.random() > 0.3, // %70 online
+              lastActive: Math.random() > 0.5 ? 'now' : `${Math.floor(Math.random() * 60)} min ago`,
+              lastTweetTime: item.posted_at
+            };
+            userMap.set(item.author_username, user);
+          }
+        });
+
+        return {
+          users: Array.from(userMap.values()),
+          tweets: parsedTweets
+        };
+      }
+
+      return { users: [], tweets: [] };
+    } catch (error) {
+      console.error('Error parsing N8N data:', error);
+      return { users: [], tweets: [] };
+    }
+  };
+
   const handleRefresh = async () => {
     setIsRefreshing(true);
     setErrorMessage('');
@@ -299,70 +411,21 @@ export const SocialNews: React.FC = () => {
       
       console.log('N8N webhook triggered successfully:', result);
       
-      // N8N'den gelen veriyi parse et
       if (result.data) {
-        try {
-          const n8nData = typeof result.data === 'string' ? JSON.parse(result.data) : result.data;
-          
-          // Kullanıcıları güncelle
-          if (n8nData.users && Array.isArray(n8nData.users)) {
-            const updatedUsers = n8nData.users.map((user: any) => ({
-              id: user.id || user.user_id || Math.random().toString(),
-              username: user.username || user.screen_name || '',
-              displayName: user.display_name || user.name || user.username || '',
-              avatar: user.profile_image_url || user.avatar || 'https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&cs=tinysrgb&w=150',
-              verified: user.verified || false,
-              followers: user.followers_count || user.followers || 0,
-              following: user.following_count || user.following || 0,
-              location: user.location || '',
-              bio: user.description || user.bio || '',
-              website: user.url || user.website || '',
-              joinDate: user.created_at || new Date().toISOString(),
-              stats: {
-                totalTweets: user.statuses_count || user.tweet_count || 0,
-                avgEngagement: user.engagement_rate || Math.random() * 10,
-                sentimentTrend: user.sentiment_trend || 'stable',
-                viralPotential: user.viral_potential || Math.floor(Math.random() * 100),
-                influence: user.influence_score || Math.floor(Math.random() * 100)
-              },
-              category: user.category || 'tech',
-              isOnline: user.is_online !== undefined ? user.is_online : Math.random() > 0.5,
-              lastActive: user.last_active || (Math.random() > 0.5 ? 'now' : `${Math.floor(Math.random() * 60)} min ago`)
-            }));
-            setUsers(updatedUsers);
-          }
-          
-          // Tweet'leri güncelle
-          if (n8nData.tweets && Array.isArray(n8nData.tweets)) {
-            const updatedTweets = n8nData.tweets.map((tweet: any) => ({
-              id: tweet.id || tweet.tweet_id || Math.random().toString(),
-              content: tweet.text || tweet.content || '',
-              timestamp: formatTimeAgo(new Date(tweet.created_at || Date.now())),
-              likes: tweet.favorite_count || tweet.likes || 0,
-              retweets: tweet.retweet_count || tweet.retweets || 0,
-              replies: tweet.reply_count || tweet.replies || 0,
-              views: tweet.view_count || tweet.views || Math.floor(Math.random() * 10000),
-              sentiment: tweet.sentiment_score || Math.random(),
-              viralScore: tweet.viral_score || Math.floor(Math.random() * 100),
-              hashtags: tweet.hashtags || [],
-              mentions: tweet.mentions || [],
-              media: tweet.media || [],
-              engagement: tweet.engagement_rate || Math.random() * 10,
-              authorId: tweet.user_id || tweet.author_id || '1',
-              location: tweet.location || ''
-            }));
-            setTweets(updatedTweets);
-          }
-          
-        } catch (parseError) {
-          console.error('Error parsing N8N data:', parseError);
-          // Fallback: sadece mock data'yı kullan
+        const parsedData = parseN8NData(result.data);
+        
+        if (parsedData.users.length > 0) {
+          setUsers(parsedData.users);
+        }
+        
+        if (parsedData.tweets.length > 0) {
+          setTweets(parsedData.tweets);
         }
       }
       
     } catch (error) {
       console.error('Error triggering N8N webhook:', error);
-      setErrorMessage('Failed to update data. Please try again.');
+      setErrorMessage('Veri güncellenirken hata oluştu. Lütfen tekrar deneyin.');
     }
     
     setIsRefreshing(false);
