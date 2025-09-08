@@ -369,97 +369,47 @@ export const SocialNews: React.FC = () => {
               </p>
             </div>
             
-            <div className="flex items-center space-x-4">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleRefresh}
-                disabled={isRefreshing}
-                className={`px-6 py-3 bg-gradient-to-r ${themeColors.secondary} text-white rounded-xl font-semibold flex items-center space-x-2 shadow-lg`}
-              >
-                <RefreshCw className={`w-5 h-5 ${isRefreshing ? 'animate-spin' : ''}`} />
-                <span>{isRefreshing ? 'Refreshing...' : 'Refresh Data'}</span>
-              </motion.button>
-              
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-6 py-3 glassmorphism text-white rounded-xl font-semibold flex items-center space-x-2 border border-white/20"
-              >
-                <Bell className="w-5 h-5" />
-                <span>Setup Alerts</span>
-              </motion.button>
-            </div>
-          </div>
-
-          {/* Advanced Filters */}
-          <div className="glassmorphism rounded-2xl p-6 border border-white/20 mb-8">
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-              {/* Search */}
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search users..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 glassmorphism-dark rounded-xl text-white placeholder-gray-400 border border-white/20 focus:border-white/40 transition-all duration-300"
-                />
-              </div>
-              
-              {/* Status Filter */}
-              <select
-                value={filterBy}
-                onChange={(e) => setFilterBy(e.target.value as any)}
-                className="px-4 py-3 glassmorphism-dark rounded-xl text-white border border-white/20 focus:border-white/40 transition-all duration-300"
-              >
-                <option value="all">All Users</option>
-                <option value="online">Online Now</option>
-                <option value="verified">Verified Only</option>
-                <option value="high-engagement">High Engagement</option>
-                <option value="trending">Trending</option>
-              </select>
-              
-              {/* Category Filter */}
-              <select
-                value={categoryFilter}
-                onChange={(e) => setCategoryFilter(e.target.value as any)}
-                className="px-4 py-3 glassmorphism-dark rounded-xl text-white border border-white/20 focus:border-white/40 transition-all duration-300"
-              >
-                <option value="all">All Categories</option>
-                <option value="tech">Technology</option>
-                <option value="business">Business</option>
-                <option value="crypto">Crypto</option>
-                <option value="ai">AI & ML</option>
-                <option value="startup">Startup</option>
-              </select>
-              
-              {/* View Mode */}
-              <div className="flex space-x-2">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setViewMode('grid')}
-                  className={`flex-1 py-3 rounded-xl font-semibold transition-all duration-300 ${
-                    viewMode === 'grid'
-                      ? `bg-gradient-to-r ${themeColors.secondary} text-white shadow-lg`
-                      : 'glassmorphism-dark text-gray-300 border border-white/20'
-                  }`}
+            {/* Advanced Filters - moved up */}
+            <div className="glassmorphism rounded-2xl p-6 border border-white/20">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                {/* Search */}
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Search users..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-10 pr-4 py-3 glassmorphism-dark rounded-xl text-white placeholder-gray-400 border border-white/20 focus:border-white/40 transition-all duration-300"
+                  />
+                </div>
+                
+                {/* Status Filter */}
+                <select
+                  value={filterBy}
+                  onChange={(e) => setFilterBy(e.target.value as any)}
+                  className="px-4 py-3 glassmorphism-dark rounded-xl text-white border border-white/20 focus:border-white/40 transition-all duration-300"
                 >
-                  Grid
-                </motion.button>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setViewMode('list')}
-                  className={`flex-1 py-3 rounded-xl font-semibold transition-all duration-300 ${
-                    viewMode === 'list'
-                      ? `bg-gradient-to-r ${themeColors.secondary} text-white shadow-lg`
-                      : 'glassmorphism-dark text-gray-300 border border-white/20'
-                  }`}
+                  <option value="all">All Users</option>
+                  <option value="online">Online Now</option>
+                  <option value="verified">Verified Only</option>
+                  <option value="high-engagement">High Engagement</option>
+                  <option value="trending">Trending</option>
+                </select>
+                
+                {/* Category Filter */}
+                <select
+                  value={categoryFilter}
+                  onChange={(e) => setCategoryFilter(e.target.value as any)}
+                  className="px-4 py-3 glassmorphism-dark rounded-xl text-white border border-white/20 focus:border-white/40 transition-all duration-300"
                 >
-                  List
-                </motion.button>
+                  <option value="all">All Categories</option>
+                  <option value="tech">Technology</option>
+                  <option value="business">Business</option>
+                  <option value="crypto">Crypto</option>
+                  <option value="ai">AI & ML</option>
+                  <option value="startup">Startup</option>
+                </select>
               </div>
             </div>
           </div>
@@ -577,66 +527,6 @@ export const SocialNews: React.FC = () => {
             {selectedUser === null ? (
               /* All Users Feed */
               <div className="space-y-6">
-                {/* Global Dashboard */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="glassmorphism rounded-3xl p-8 border border-white/20"
-                >
-                  <h2 className="text-3xl font-bold text-white mb-8 flex items-center">
-                    <Activity className="w-8 h-8 mr-3 text-cyan-400" />
-                    Global Activity Dashboard
-                  </h2>
-                  
-                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    {[
-                      { icon: MessageSquare, label: 'Total Tweets', value: '12.4K', change: '+18%', color: 'text-blue-400' },
-                      { icon: Heart, label: 'Total Likes', value: '2.8M', change: '+25%', color: 'text-red-400' },
-                      { icon: Users, label: 'Active Users', value: filteredUsers.length.toString(), change: '+12%', color: 'text-green-400' },
-                      { icon: TrendingUp, label: 'Avg Engagement', value: '8.2%', change: '+7%', color: 'text-purple-400' },
-                    ].map((stat, index) => (
-                      <motion.div
-                        key={stat.label}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: index * 0.1 }}
-                        whileHover={{ scale: 1.05, y: -5 }}
-                        className="text-center p-6 glassmorphism-dark rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300"
-                      >
-                        <stat.icon className={`w-10 h-10 ${stat.color} mx-auto mb-4`} />
-                        <div className="text-3xl font-bold text-white mb-2">{stat.value}</div>
-                        <div className="text-sm text-gray-400 mb-2">{stat.label}</div>
-                        <div className={`text-sm font-semibold ${stat.change.startsWith('+') ? 'text-green-400' : 'text-red-400'}`}>
-                          {stat.change}
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-
-                  {/* Category Distribution */}
-                  <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-                    {['tech', 'business', 'crypto', 'ai', 'startup'].map((category, index) => {
-                      const count = mockUsers.filter(u => u.category === category).length;
-                      const CategoryIcon = getCategoryIcon(category);
-                      return (
-                        <motion.div
-                          key={category}
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: 0.5 + index * 0.1 }}
-                          whileHover={{ scale: 1.05 }}
-                          className="text-center p-4 glassmorphism-dark rounded-xl border border-white/10 hover:border-white/20 transition-all duration-300"
-                        >
-                          <div className={`w-12 h-12 mx-auto mb-3 rounded-xl bg-gradient-to-r ${getCategoryColor(category)} flex items-center justify-center shadow-lg`}>
-                            <CategoryIcon className="w-6 h-6 text-white" />
-                          </div>
-                          <div className="text-xl font-bold text-white mb-1">{count}</div>
-                          <div className="text-xs text-gray-400 capitalize">{category}</div>
-                        </motion.div>
-                      );
-                    })}
-                  </div>
-                </motion.div>
 
                 {/* Recent Activity Feed */}
                 <motion.div
@@ -645,10 +535,46 @@ export const SocialNews: React.FC = () => {
                   transition={{ delay: 0.4 }}
                   className="glassmorphism rounded-3xl p-8 border border-white/20"
                 >
-                  <h2 className="text-3xl font-bold text-white mb-8 flex items-center">
-                    <Clock className="w-8 h-8 mr-3 text-green-400" />
-                    Recent Activity Feed
-                  </h2>
+                  <div className="flex items-center justify-between mb-8">
+                    <h2 className="text-3xl font-bold text-white flex items-center">
+                      <Clock className="w-8 h-8 mr-3 text-green-400" />
+                      Recent Activity Feed
+                    </h2>
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={async () => {
+                        try {
+                          setIsRefreshing(true);
+                          const response = await fetch('https://clerkvespike.app.n8n.cloud/webhook/twitter-collect', {
+                            method: 'POST',
+                            headers: {
+                              'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                              trigger: 'manual',
+                              timestamp: new Date().toISOString()
+                            })
+                          });
+                          
+                          if (response.ok) {
+                            // Simulate data refresh
+                            await new Promise(resolve => setTimeout(resolve, 2000));
+                            console.log('Webhook triggered successfully');
+                          }
+                        } catch (error) {
+                          console.error('Webhook error:', error);
+                        } finally {
+                          setIsRefreshing(false);
+                        }
+                      }}
+                      disabled={isRefreshing}
+                      className={`px-6 py-3 bg-gradient-to-r ${themeColors.secondary} text-white rounded-xl font-semibold flex items-center space-x-2 shadow-lg disabled:opacity-50`}
+                    >
+                      <RefreshCw className={`w-5 h-5 ${isRefreshing ? 'animate-spin' : ''}`} />
+                      <span>{isRefreshing ? 'Updating...' : 'Update Data'}</span>
+                    </motion.button>
+                  </div>
                   
                   <div className="space-y-6">
                     {mockTweets.map((tweet, index) => {
