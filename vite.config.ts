@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/twitter_n8n_v6/', // GitHub repo adınız için
+  base: '/', // Cloudflare Pages için root path
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
