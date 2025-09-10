@@ -1,13 +1,15 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://akwzboazrpoccdvaalzv.supabase.co';
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFrd3pib2F6cnBvY2NkdmFhbHp2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY2NTI4OTgsImV4cCI6MjA3MjIyODg5OH0.9kwEu9whB4KhJ0kb-YzeE3HO3kxGe05fv2hqh-cdTSI';
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables');
-}
-
+// Create Supabase client
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+// Log connection status
+console.log('🚀 Supabase client initialized');
+console.log('📍 URL:', supabaseUrl);
+console.log('🔑 Key configured:', supabaseAnonKey ? 'Yes' : 'No');
 
 // Database types
 export interface SocialPost {
