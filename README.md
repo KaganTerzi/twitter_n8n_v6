@@ -1,5 +1,7 @@
 # AI Social Intelligence Platform
 
+🚀 **Live Demo**: [View the deployed application](https://kagantterzi.github.io/twitter_n8n_v6/)
+
 Modern AI destekli sosyal medya analiz platformu. Gerçek zamanlı trend analizi, duygu analizi ve viral içerik tahmini.
 
 ## 🚀 Özellikler
