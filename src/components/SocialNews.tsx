@@ -556,20 +556,35 @@ export const SocialNews: React.FC = () => {
       const webhookResult = await triggerN8NWebhook();
       console.log('✅ Webhook triggered:', webhookResult);
       
-      // 2. Wait a bit for webhook to process
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // 2. Wait for N8N to process and write to Supabase
+      console.log('⏳ Waiting for N8N to process data...');
+      await new Promise(resolve => setTimeout(resolve, 5000));
       
-      // 3. Simulate fresh data arrival
-      console.log('📊 Processing fresh Twitter data...');
+      // 3. Check for fresh data multiple times
+      for (let attempt = 1; attempt <= 3; attempt++) {
+        console.log(`🔍 Checking for fresh data (attempt ${attempt}/3)...`);
+        await refreshData();
+        
+        // Check if we got new data
+        const freshDataCheck = await new Promise(resolve => {
+          setTimeout(() => {
+            const hasOzanTweets = socialPosts.some(post => post.author_username === 'ozan_sihay');
+            resolve(hasOzanTweets);
+          }, 1000);
+        });
+        
+        if (freshDataCheck) {
+          console.log('✅ Fresh Twitter data found!');
+          break;
+        }
+        
+        if (attempt < 3) {
+          console.log('⏳ Waiting 3 more seconds...');
+          await new Promise(resolve => setTimeout(resolve, 3000));
+        }
+      }
       
-      // Add timestamp to show data is "fresh"
-      const freshTimestamp = new Date().toISOString();
-      console.log('🕒 Data timestamp:', freshTimestamp);
-      
-      // Trigger UI refresh
-      await refreshData();
-      
-      console.log('✅ Fresh Twitter data loaded!');
+      console.log('✅ Data refresh process completed!');
       
     } catch (error) {
       console.error('❌ Error during refresh:', error);
