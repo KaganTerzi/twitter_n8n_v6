@@ -1159,7 +1159,8 @@ export const SocialNews: React.FC = () => {
                             const tweetDate = new Date(t.posted_at);
                             const now = new Date();
                             const diffInHours = (now.getTime() - tweetDate.getTime()) / (1000 * 60 * 60);
-                            return t.authorId === user.id && diffInHours <= 24;
+                            // Match by username or ID
+                            return (t.author_username === user.username || t.authorId === user.id) && diffInHours <= 24;
                           }).slice(0, 10).map((tweet, index) => (
                             <motion.div
                               key={tweet.id}
