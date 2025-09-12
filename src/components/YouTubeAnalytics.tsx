@@ -730,109 +730,47 @@ export const YouTubeAnalytics: React.FC = () => {
           </motion.div>
         )}
         
-        {/* Ozan'ın Bugünkü Tweet'leri */}
+        {/* Ozan'ın Bugünkü Tweet'leri - Basitleştirilmiş */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
           className="mt-12 glassmorphism rounded-3xl p-8 border border-white/20"
         >
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-3xl font-bold text-white flex items-center">
-              <MessageSquare className="w-8 h-8 mr-3 text-blue-400" />
-              Ozan Şihay'ın Bugünkü Tweet'leri
-            </h2>
-            <div className="flex items-center space-x-2 text-sm text-gray-400">
-              <Clock className="w-4 h-4" />
-              <span>Son 24 saat</span>
-            </div>
-          </div>
+          <h2 className="text-3xl font-bold text-white mb-8">
+            🐦 Ozan Şihay'ın Bugünkü Tweet'leri
+          </h2>
           
           <div className="space-y-6">
             {socialPosts
               .filter(post => post.author_username === 'ozan_sihay')
-              .filter(post => {
-                const tweetDate = new Date(post.posted_at);
-                const now = new Date();
-                const diffInHours = (now.getTime() - tweetDate.getTime()) / (1000 * 60 * 60);
-                return diffInHours <= 24;
-              })
+              .slice(0, 5)
               .map((post, index) => (
-                <motion.div
+                <div
                   key={post.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.7 + index * 0.1 }}
-                  whileHover={{ scale: 1.02, y: -2 }}
-                  className="p-6 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-2xl border border-blue-400/20 hover:border-blue-400/40 transition-all duration-300"
+                  className="p-6 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-2xl border border-blue-400/20"
                 >
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
-                        <span className="text-white font-bold text-lg">OŞ</span>
-                      </div>
-                      <div>
-                        <h3 className="font-bold text-white text-lg">{post.author_name}</h3>
-                        <p className="text-gray-400 text-sm">@{post.author_username}</p>
-                      </div>
+                  <div className="flex items-center space-x-3 mb-4">
+                    <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center">
+                      <span className="text-white font-bold">OŞ</span>
                     </div>
-                    <div className="text-gray-400 text-sm">
-                      {new Date(post.posted_at).toLocaleTimeString('tr-TR', { 
-                        hour: '2-digit', 
-                        minute: '2-digit' 
-                      })}
+                    <div>
+                      <h3 className="font-bold text-white">{post.author_name}</h3>
+                      <p className="text-gray-400 text-sm">@{post.author_username}</p>
                     </div>
                   </div>
                   
-                  <p className="text-gray-300 mb-4 leading-relaxed text-lg">{post.content}</p>
+                  <p className="text-gray-300 mb-4 leading-relaxed">{post.content}</p>
                   
-                  {/* Hashtags */}
-                  {post.hashtags.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {post.hashtags.map((hashtag, i) => (
-                        <span key={i} className="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm">
-                          #{hashtag}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                  
-                  {/* Engagement Stats */}
-                  <div className="flex items-center justify-between pt-4 border-t border-white/10">
-                    <div className="flex items-center space-x-6 text-sm text-gray-400">
-                      <span className="flex items-center space-x-1">
-                        <Heart className="w-4 h-4" />
-                        <span>{post.likes_count}</span>
-                      </span>
-                      <span className="flex items-center space-x-1">
-                        <Repeat2 className="w-4 h-4" />
-                        <span>{post.shares_count}</span>
-                      </span>
-                      <span className="flex items-center space-x-1">
-                        <MessageSquare className="w-4 h-4" />
-                        <span>{post.comments_count}</span>
-                      </span>
-                      <span className="flex items-center space-x-1">
-                        <Eye className="w-4 h-4" />
-                        <span>{(post.reach / 1000).toFixed(1)}K</span>
-                      </span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-green-400 font-semibold">
-                        {(post.sentiment_score * 100).toFixed(0)}% Positive
-                      </span>
-                    </div>
+                  <div className="flex items-center space-x-4 text-sm text-gray-400">
+                    <span>❤️ {post.likes_count}</span>
+                    <span>🔄 {post.shares_count}</span>
+                    <span>💬 {post.comments_count}</span>
+                    <span>👁️ {(post.reach / 1000).toFixed(1)}K</span>
                   </div>
-                </motion.div>
+                </div>
               ))
             }
-            
-            {socialPosts.filter(post => post.author_username === 'ozan_sihay').length === 0 && (
-              <div className="text-center py-12">
-                <MessageSquare className="w-16 h-16 text-gray-500 mx-auto mb-4" />
-                <p className="text-gray-400 text-lg">Bugün henüz tweet paylaşılmamış</p>
-              </div>
-            )}
           </div>
         </motion.div>
       </div>
