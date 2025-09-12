@@ -40,7 +40,6 @@ import {
   Video,
   Share,
   Star,
-  MessageSquare,
   Clock,
   Heart,
   Repeat2,
