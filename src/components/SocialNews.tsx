@@ -39,6 +39,7 @@ import {
   Radar
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
+import { useSocialData } from '../hooks/useSocialData';
 
 // N8N webhook function
 const triggerN8NWebhook = async () => {
@@ -122,6 +123,7 @@ interface Tweet {
 export const SocialNews: React.FC = () => {
   const { getThemeColors } = useTheme();
   const themeColors = getThemeColors();
+  const { socialPosts, loading, error, refreshData } = useSocialData();
   
   // Mock data - n8n workflow'undan gelecek gerçek veriler
   const mockUsers: TwitterUser[] = [
@@ -265,7 +267,38 @@ export const SocialNews: React.FC = () => {
     }
   ];
 
-  const mockTweets: Tweet[] = [
+  // Convert socialPosts to Tweet format
+  const formatTimeAgo = (date: Date): string => {
+    const now = new Date();
+    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+    
+    if (diffInSeconds < 60) return `${diffInSeconds}s ago`;
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
+    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
+    return `${Math.floor(diffInSeconds / 86400)}d ago`;
+  };
+
+  const mockTweets: Tweet[] = socialPosts.length > 0 ? socialPosts.map(post => ({
+    id: post.id,
+    platform: post.platform,
+    post_id: post.post_id,
+    content: post.content,
+    timestamp: formatTimeAgo(new Date(post.posted_at)),
+    posted_at: post.posted_at,
+    likes: post.likes_count,
+    retweets: post.shares_count,
+    replies: post.comments_count,
+    views: post.reach,
+    sentiment: post.sentiment_score,
+    viralScore: post.viral_score * 100,
+    hashtags: post.hashtags,
+    mentions: post.mentions,
+    engagement: post.engagement_rate,
+    authorId: post.author_username,
+    author_username: post.author_username,
+    author_name: post.author_name,
+    location: post.location
+  })) : [
     {
       id: '1',
       content: 'AI\'ın geleceği hakkında düşünürken, insan-makine işbirliğinin ne kadar önemli olduğunu anlıyorum. Teknoloji bizi desteklemeli, yerine geçmemeli.',
@@ -320,7 +353,93 @@ export const SocialNews: React.FC = () => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [users, setUsers] = useState<TwitterUser[]>(mockUsers);
-  const [tweets, setTweets] = useState<Tweet[]>(mockTweets);
+  
+  // Convert socialPosts to tweets format or use fallback data
+  const tweets = socialPosts.length > 0 ? socialPosts.map(post => ({
+    id: post.id,
+    platform: post.platform,
+    post_id: post.post_id,
+    content: post.content,
+    timestamp: formatTimeAgo(new Date(post.posted_at)),
+    posted_at: post.posted_at,
+    likes: post.likes_count,
+    retweets: post.shares_count,
+    replies: post.comments_count,
+    views: post.reach,
+    sentiment: post.sentiment_score,
+    viralScore: post.viral_score * 100,
+    hashtags: post.hashtags,
+    mentions: post.mentions,
+    engagement: post.engagement_rate,
+    authorId: post.author_username,
+    author_username: post.author_username,
+    author_name: post.author_name,
+    location: post.location
+  })) : [
+    {
+      id: '1',
+      platform: 'twitter',
+      post_id: 'fallback_1',
+      content: 'AI\'ın geleceği hakkında düşünürken, insan-makine işbirliğinin ne kadar önemli olduğunu anlıyorum. Teknoloji bizi desteklemeli, yerine geçmemeli.',
+      timestamp: '2 hours ago',
+      posted_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+      likes: 245,
+      retweets: 89,
+      replies: 34,
+      views: 12500,
+      sentiment: 0.85,
+      viralScore: 78,
+      hashtags: ['#AI', '#Technology', '#Future'],
+      mentions: [],
+      engagement: 7.2,
+      authorId: '1',
+      author_username: 'tech_guru',
+      author_name: 'Tech Guru',
+      location: 'San Francisco'
+    },
+    {
+      id: '2',
+      platform: 'twitter',
+      post_id: 'fallback_2',
+      content: 'Google\'ın yeni algoritma güncellemesi SEO dünyasını yine karıştırdı. Core Web Vitals\'a odaklanmak artık daha da kritik.',
+      timestamp: '4 hours ago',
+      posted_at: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
+      likes: 189,
+      retweets: 156,
+      replies: 67,
+      views: 8900,
+      sentiment: 0.72,
+      viralScore: 85,
+      hashtags: ['#SEO', '#Google', '#WebVitals'],
+      mentions: ['@Google'],
+      engagement: 8.1,
+      authorId: '2',
+      author_username: 'seo_expert',
+      author_name: 'SEO Expert',
+      location: 'New York'
+    },
+    {
+      id: '3',
+      platform: 'twitter',
+      post_id: 'fallback_3',
+      content: 'Claude AI\'ın yeni özellikleri gerçekten etkileyici. Özellikle kod yazma konusundaki yetenekleri çok gelişmiş.',
+      timestamp: '1 hour ago',
+      posted_at: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
+      likes: 567,
+      retweets: 234,
+      replies: 89,
+      views: 25000,
+      sentiment: 0.91,
+      viralScore: 92,
+      hashtags: ['#ClaudeAI', '#Coding', '#AI'],
+      mentions: ['@ClaudeAI'],
+      engagement: 9.4,
+      authorId: '4',
+      author_username: 'ai_developer',
+      author_name: 'AI Developer',
+      location: 'Berlin'
+    }
+  ];
 
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -429,17 +548,6 @@ export const SocialNews: React.FC = () => {
     }
     
     setIsRefreshing(false);
-  };
-
-  // Helper function for time formatting
-  const formatTimeAgo = (date: Date): string => {
-    const now = new Date();
-    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-    
-    if (diffInSeconds < 60) return `${diffInSeconds}s ago`;
-    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
-    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
-    return `${Math.floor(diffInSeconds / 86400)}d ago`;
   };
 
   const filteredUsers = users.filter(user => {
@@ -733,8 +841,33 @@ export const SocialNews: React.FC = () => {
                   
                   <div className="space-y-6">
                     {tweets.map((tweet, index) => {
-                      const author = users.find(u => u.id === tweet.authorId);
-                      if (!author) return null;
+                      // Find author by username instead of ID
+                      const author = users.find(u => u.username === tweet.author_username) || 
+                                   users.find(u => u.id === tweet.authorId) ||
+                                   // Create a temporary author if not found
+                                   {
+                                     id: tweet.authorId,
+                                     username: tweet.author_username,
+                                     displayName: tweet.author_name || tweet.author_username,
+                                     avatar: 'https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&cs=tinysrgb&w=150',
+                                     verified: false,
+                                     isOnline: Math.random() > 0.5,
+                                     followers: Math.floor(Math.random() * 10000) + 1000,
+                                     following: Math.floor(Math.random() * 1000) + 100,
+                                     location: 'Unknown',
+                                     bio: 'Social Media User',
+                                     website: '',
+                                     joinDate: '2020-01-01',
+                                     stats: {
+                                       totalTweets: Math.floor(Math.random() * 1000) + 100,
+                                       avgEngagement: Math.random() * 10,
+                                       sentimentTrend: 'stable' as const,
+                                       viralPotential: Math.floor(Math.random() * 100),
+                                       influence: Math.floor(Math.random() * 100)
+                                     },
+                                     category: 'general',
+                                     lastActive: 'recently'
+                                   };
                       
                       return (
                         <motion.div
