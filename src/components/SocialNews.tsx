@@ -1220,7 +1220,7 @@ export const SocialNews: React.FC = () => {
                           }).slice(0, 15).map((tweet, index) => {
                             const isUserTweet = tweet.author_username === user.username;
                             return (
-                            <motion.div
+                              <motion.div
                               key={tweet.id}
                               initial={{ opacity: 0, x: -20 }}
                               animate={{ opacity: 1, x: 0 }}
@@ -1353,8 +1353,9 @@ export const SocialNews: React.FC = () => {
                                   </div>
                                 </div>
                               </div>
-                            </motion.div>
-                          ))}
+                              </motion.div>
+                            );
+                          })}
                         </div>
                       </motion.div>
                     </>
