@@ -610,7 +610,7 @@ export const SocialNews: React.FC = () => {
 
   return (
     <div className="min-h-screen pt-16 pb-8">
-      <div className="max-w-5xl mx-auto px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -635,9 +635,9 @@ export const SocialNews: React.FC = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setShowSettings(!showSettings)}
-              className="glassmorphism p-4 rounded-xl border border-white/20 hover:border-white/40 transition-all duration-300"
+              className="glassmorphism p-3 rounded-lg border border-white/10 hover:border-white/30 transition-all duration-300"
             >
-              <Settings className="w-6 h-6 text-white" />
+              <Settings className={`w-5 h-5 ${showSettings ? 'text-blue-400' : 'text-gray-400'}`} />
             </motion.button>
             
             {/* Advanced Filters - moved up */}
@@ -690,34 +690,34 @@ export const SocialNews: React.FC = () => {
         <AnimatePresence>
           {showSettings && (
             <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="mb-8 glassmorphism rounded-2xl p-6 border border-white/20"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="mb-6 glassmorphism rounded-xl p-4 border border-white/10"
             >
-              <h3 className="text-xl font-bold text-white mb-4">Timeline Settings</h3>
-              <div className="flex flex-wrap gap-3">
-                {[
-                  { value: 6, label: '6 hours' },
-                  { value: 12, label: '12 hours' },
-                  { value: 24, label: '24 hours' },
-                  { value: 48, label: '48 hours' },
-                  { value: 168, label: '7 days' }
-                ].map((option) => (
-                  <motion.button
-                    key={option.value}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => setTimeFilter(option.value as 6 | 12 | 24 | 48 | 168)}
-                    className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-                      timeFilter === option.value
-                        ? 'bg-blue-500 text-white'
-                        : 'glassmorphism-dark text-gray-300 hover:text-white border border-white/20'
-                    }`}
-                  >
-                    {option.label}
-                  </motion.button>
-                ))}
+              <div className="flex items-center justify-between">
+                <span className="text-white font-medium">Show tweets from last:</span>
+                <div className="flex gap-2">
+                  {[
+                    { value: 6, label: '6h' },
+                    { value: 12, label: '12h' },
+                    { value: 24, label: '24h' },
+                    { value: 48, label: '48h' },
+                    { value: 168, label: '7d' }
+                  ].map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={() => setTimeFilter(option.value as 6 | 12 | 24 | 48 | 168)}
+                      className={`px-3 py-1 rounded text-sm transition-all duration-200 ${
+                        timeFilter === option.value
+                          ? 'bg-blue-500 text-white'
+                          : 'text-gray-400 hover:text-white hover:bg-white/10'
+                      }`}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
               </div>
             </motion.div>
           )}
