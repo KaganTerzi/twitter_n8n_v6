@@ -39,11 +39,7 @@ import {
   Volume2,
   Video,
   Share,
-  Star,
-  Clock,
-  Heart,
-  Repeat2,
-  Eye
+  Star
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useSocialData } from '../hooks/useSocialData';
