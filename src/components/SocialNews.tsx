@@ -36,23 +36,24 @@ import {
   Sparkles,
   Crown,
   Shield,
-  Radar
+  Radar,
+  Settings
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useSocialData } from '../hooks/useSocialData';
 
-// N8N webhook function
+// Production N8N webhook function
 const triggerN8NWebhook = async () => {
   try {
-    const response = await fetch('https://n8nautomationbolt.app.n8n.cloud/webhook/twitter-collect', {
+    const response = await fetch('https://iojwzu87.rpcld.app/webhook/twitter-collect', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        timestamp: new Date().toISOString(),
-        source: 'socialnews-frontend',
-        action: 'fetch_latest_data'
+        action: 'fetch_latest',
+        limit: 10,
+        timestamp: new Date().toISOString()
       })
     });
 
@@ -353,6 +354,8 @@ export const SocialNews: React.FC = () => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [users, setUsers] = useState<TwitterUser[]>(mockUsers);
+  const [showSettings, setShowSettings] = useState(false);
+  const [timeFilter, setTimeFilter] = useState<6 | 12 | 24 | 48 | 168>(24);
   
   // Convert socialPosts to tweets format or use fallback data
   const tweets = socialPosts.length > 0 ? socialPosts.map(post => ({
@@ -607,7 +610,7 @@ export const SocialNews: React.FC = () => {
 
   return (
     <div className="min-h-screen pt-16 pb-8">
-      <div className="max-w-full mx-auto px-6">
+      <div className="max-w-5xl mx-auto px-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -626,6 +629,16 @@ export const SocialNews: React.FC = () => {
                 Monitor 100+ influential accounts in real-time
               </p>
             </div>
+            
+            {/* Settings Button */}
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setShowSettings(!showSettings)}
+              className="glassmorphism p-4 rounded-xl border border-white/20 hover:border-white/40 transition-all duration-300"
+            >
+              <Settings className="w-6 h-6 text-white" />
+            </motion.button>
             
             {/* Advanced Filters - moved up */}
             <div className="glassmorphism rounded-2xl p-6 border border-white/20">
@@ -672,7 +685,44 @@ export const SocialNews: React.FC = () => {
             </div>
           </div>
         </motion.div>
-
+        
+        {/* Settings Panel */}
+        <AnimatePresence>
+          {showSettings && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="mb-8 glassmorphism rounded-2xl p-6 border border-white/20"
+            >
+              <h3 className="text-xl font-bold text-white mb-4">Timeline Settings</h3>
+              <div className="flex flex-wrap gap-3">
+                {[
+                  { value: 6, label: '6 hours' },
+                  { value: 12, label: '12 hours' },
+                  { value: 24, label: '24 hours' },
+                  { value: 48, label: '48 hours' },
+                  { value: 168, label: '7 days' }
+                ].map((option) => (
+                  <motion.button
+                    key={option.value}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setTimeFilter(option.value as 6 | 12 | 24 | 48 | 168)}
+                    className={`px-4 py-2 rounded-lg transition-all duration-300 ${
+                      timeFilter === option.value
+                        ? 'bg-blue-500 text-white'
+                        : 'glassmorphism-dark text-gray-300 hover:text-white border border-white/20'
+                    }`}
+                  >
+                    {option.label}
+                  </motion.button>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+        
         <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
           {/* Left Sidebar - User Grid/List */}
           <div className="xl:col-span-1">
@@ -1139,8 +1189,8 @@ export const SocialNews: React.FC = () => {
                             const tweetDate = new Date(t.posted_at);
                             const now = new Date();
                             const diffInHours = (now.getTime() - tweetDate.getTime()) / (1000 * 60 * 60);
-                            // Match by username or ID
-                            return (t.author_username === user.username || t.authorId === user.id) && diffInHours <= 24;
+                            // Match by username or ID and use dynamic time filter
+                            return (t.author_username === user.username || t.authorId === user.id) && diffInHours <= timeFilter;
                           }).slice(0, 10).map((tweet, index) => (
                             <motion.div
                               key={tweet.id}
