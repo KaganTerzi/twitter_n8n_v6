@@ -125,6 +125,7 @@ export const SocialNews: React.FC = () => {
   const { getThemeColors } = useTheme();
   const themeColors = getThemeColors();
   const { socialPosts, loading, error, refreshData } = useSocialData();
+  const [realTimeData, setRealTimeData] = useState<any[]>([]);
   
   // Mock data - n8n workflow'undan gelecek gerçek veriler
   const mockUsers: TwitterUser[] = [
@@ -137,7 +138,7 @@ export const SocialNews: React.FC = () => {
       followers: 45000,
       following: 1200,
       location: 'Istanbul, Turkey',
-      bio: 'Digital Marketing Expert & AI Enthusiast',
+      bio: '🎬 Filmmaker | 📺 YouTube Creator | 🇹🇷 Turkey/Canada | Digital Marketing Expert & AI Enthusiast',
       website: 'ozansihay.com',
       joinDate: '2015-03-15',
       stats: {
@@ -160,7 +161,7 @@ export const SocialNews: React.FC = () => {
       followers: 125000,
       following: 890,
       location: 'New York, USA',
-      bio: 'SEO Expert & Digital Marketing Consultant',
+      bio: '🔍 SEO Expert | 📈 Digital Marketing Consultant | 📚 Author | 🇺🇸 New York Based',
       website: 'glenngabe.com',
       joinDate: '2009-05-20',
       stats: {
@@ -529,24 +530,22 @@ export const SocialNews: React.FC = () => {
     setErrorMessage('');
     
     try {
-      const result = await triggerN8NWebhook();
+      // 1. Trigger webhook to collect fresh Twitter data
+      console.log('🔄 Triggering webhook to collect fresh data...');
+      const webhookResult = await triggerN8NWebhook();
+      console.log('✅ Webhook triggered:', webhookResult);
       
-      console.log('N8N webhook triggered successfully:', result);
+      // 2. Wait a bit for webhook to process
+      await new Promise(resolve => setTimeout(resolve, 2000));
       
-      if (result.data) {
-        const parsedData = parseN8NData(result.data);
-        
-        if (parsedData.users.length > 0) {
-          setUsers(parsedData.users);
-        }
-        
-        if (parsedData.tweets.length > 0) {
-          setTweets(parsedData.tweets);
-        }
-      }
+      // 3. Refresh data from Supabase
+      console.log('📊 Refreshing data from Supabase...');
+      await refreshData();
+      
+      console.log('✅ Data refresh completed!');
       
     } catch (error) {
-      console.error('Error triggering N8N webhook:', error);
+      console.error('❌ Error during refresh:', error);
       setErrorMessage('Veri güncellenirken hata oluştu. Lütfen tekrar deneyin.');
     }
     

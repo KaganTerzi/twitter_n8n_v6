@@ -155,7 +155,7 @@ export const useSocialData = () => {
   const fetchSocialPosts = async (category?: string, limit = 10) => {
     try {
       let query = supabase
-        .from('social_posts')
+        .from('social_media_posts')
         .select('*')
         .order('posted_at', { ascending: false })
         .limit(limit);
