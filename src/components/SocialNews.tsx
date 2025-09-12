@@ -1181,7 +1181,8 @@ export const SocialNews: React.FC = () => {
                         <div className="flex items-center justify-between mb-8">
                           <h2 className="text-3xl font-bold text-white flex items-center">
                             <MessageSquare className="w-8 h-8 mr-3 text-blue-400" />
-                            Recent Tweets
+                            Timeline Feed
+                            <span className="ml-3 text-lg text-gray-400">({user.displayName} highlighted)</span>
                           </h2>
                           <div className="flex space-x-3">
                             <motion.button
@@ -1205,23 +1206,41 @@ export const SocialNews: React.FC = () => {
                         
                         <div className="space-y-6">
                           {tweets.filter(t => {
-                            // Son 24 saat içindeki tweet'leri filtrele
+                            // Tüm tweet akışını göster, zaman filtresi uygula
                             const tweetDate = new Date(t.posted_at);
                             const now = new Date();
                             const diffInHours = (now.getTime() - tweetDate.getTime()) / (1000 * 60 * 60);
-                            // Match by username or ID and use dynamic time filter
-                            return (t.author_username === user.username || t.authorId === user.id) && diffInHours <= timeFilter;
-                          }).slice(0, 10).map((tweet, index) => (
+                            return diffInHours <= timeFilter;
+                          }).sort((a, b) => {
+                            // Seçili kullanıcının tweet'lerini üstte göster
+                            if (a.author_username === user.username && b.author_username !== user.username) return -1;
+                            if (b.author_username === user.username && a.author_username !== user.username) return 1;
+                            // Sonra tarih sırasına göre
+                            return new Date(b.posted_at).getTime() - new Date(a.posted_at).getTime();
+                          }).slice(0, 15).map((tweet, index) => {
+                            const isUserTweet = tweet.author_username === user.username;
+                            return (
                             <motion.div
                               key={tweet.id}
                               initial={{ opacity: 0, x: -20 }}
                               animate={{ opacity: 1, x: 0 }}
                               transition={{ delay: 0.3 + index * 0.1 }}
                               whileHover={{ scale: 1.01, y: -2 }}
-                              className="p-8 glassmorphism-dark rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300 group"
+                              className={`p-8 rounded-2xl border transition-all duration-300 group ${
+                                isUserTweet 
+                                  ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 border-blue-400/30 hover:border-blue-400/50' 
+                                  : 'glassmorphism-dark border-white/10 hover:border-white/20'
+                              }`}
                             >
                               <div className="flex items-start justify-between mb-6">
                                 <div className="flex items-center space-x-3">
+                                  {!isUserTweet && (
+                                    <>
+                                      <span className="font-bold text-white">{tweet.author_name}</span>
+                                      <span className="text-gray-400">@{tweet.author_username}</span>
+                                      <span className="text-gray-500">•</span>
+                                    </>
+                                  )}
                                   <span className="text-gray-400 text-lg">{tweet.timestamp}</span>
                                   {tweet.location && (
                                     <>
@@ -1238,6 +1257,14 @@ export const SocialNews: React.FC = () => {
                                   <MoreHorizontal className="w-5 h-5 text-gray-400" />
                                 </motion.button>
                               </div>
+                              
+                              {/* User Indicator for highlighted tweets */}
+                              {isUserTweet && (
+                                <div className="flex items-center space-x-2 mb-4">
+                                  <div className="w-3 h-3 bg-blue-400 rounded-full"></div>
+                                  <span className="text-blue-400 text-sm font-medium">{user.displayName}'s Tweet</span>
+                                </div>
+                              )}
                               
                               <p className="text-gray-300 mb-6 leading-relaxed text-xl">{tweet.content}</p>
                               
