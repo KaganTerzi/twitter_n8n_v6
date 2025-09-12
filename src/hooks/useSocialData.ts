@@ -152,7 +152,7 @@ export const useSocialData = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchSocialPosts = async (category?: string, limit = 50) => {
+  const fetchSocialPosts = async (category?: string, limit = 10) => {
     try {
       let query = supabase
         .from('social_posts')
@@ -175,7 +175,7 @@ export const useSocialData = () => {
     }
   };
 
-  const fetchTrendingTopics = async (limit = 20) => {
+  const fetchTrendingTopics = async (limit = 8) => {
     try {
       const { data, error } = await supabase
         .from('trending_topics')
@@ -272,8 +272,8 @@ export const useSocialData = () => {
     } catch (err) {
       console.error('Critical error in refreshData:', err);
       // Even on critical error, provide mock data
-      setSocialPosts(getMockSocialPosts(50));
-      setTrendingTopics(getMockTrendingTopics(20));
+      setSocialPosts(getMockSocialPosts(10));
+      setTrendingTopics(getMockTrendingTopics(8));
       setSentimentData(getMockSentimentData());
       setError(null); // Don't show error to user, just use fallback data
     } finally {
@@ -284,26 +284,11 @@ export const useSocialData = () => {
   useEffect(() => {
     refreshData();
 
-    // Set up real-time subscriptions
-    const postsSubscription = supabase
-      .channel('social_posts_changes')
-      .on('postgres_changes', 
-        { event: '*', schema: 'public', table: 'social_posts' },
-        () => refreshData()
-      )
-      .subscribe();
-
-    const topicsSubscription = supabase
-      .channel('trending_topics_changes')
-      .on('postgres_changes',
-        { event: '*', schema: 'public', table: 'trending_topics' },
-        () => refreshData()
-      )
-      .subscribe();
-
+    // Real-time subscriptions disabled to reduce API calls
+    // Can be enabled when Supabase is properly configured
+    
     return () => {
-      postsSubscription.unsubscribe();
-      topicsSubscription.unsubscribe();
+      // Cleanup if needed
     };
   }, []);
 

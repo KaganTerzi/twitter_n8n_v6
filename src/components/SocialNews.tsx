@@ -379,44 +379,44 @@ export const SocialNews: React.FC = () => {
     {
       id: '1',
       platform: 'twitter',
-      post_id: 'fallback_1',
-      content: 'AI\'ın geleceği hakkında düşünürken, insan-makine işbirliğinin ne kadar önemli olduğunu anlıyorum. Teknoloji bizi desteklemeli, yerine geçmemeli.',
+      post_id: 'ozan_tweet_1',
+      content: 'Yapay zeka ve dijital pazarlama stratejilerinin birleşimi inanılmaz fırsatlar yaratıyor. Özellikle kişiselleştirme konusunda çok büyük potansiyel var! 🚀 #DigitalMarketing #AI',
       timestamp: '2 hours ago',
       posted_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-      likes: 245,
-      retweets: 89,
-      replies: 34,
-      views: 12500,
-      sentiment: 0.85,
-      viralScore: 78,
-      hashtags: ['#AI', '#Technology', '#Future'],
+      likes: 342,
+      retweets: 156,
+      replies: 47,
+      views: 15200,
+      sentiment: 0.89,
+      viralScore: 85,
+      hashtags: ['#DigitalMarketing', '#AI'],
       mentions: [],
-      engagement: 7.2,
+      engagement: 8.5,
       authorId: '1',
-      author_username: 'tech_guru',
-      author_name: 'Tech Guru',
-      location: 'San Francisco'
+      author_username: 'ozan_sihay',
+      author_name: 'Ozan Şihay',
+      location: 'Istanbul, Turkey'
     },
     {
       id: '2',
       platform: 'twitter',
-      post_id: 'fallback_2',
-      content: 'Google\'ın yeni algoritma güncellemesi SEO dünyasını yine karıştırdı. Core Web Vitals\'a odaklanmak artık daha da kritik.',
-      timestamp: '4 hours ago',
-      posted_at: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
-      likes: 189,
-      retweets: 156,
-      replies: 67,
-      views: 8900,
-      sentiment: 0.72,
-      viralScore: 85,
-      hashtags: ['#SEO', '#Google', '#WebVitals'],
-      mentions: ['@Google'],
-      engagement: 8.1,
-      authorId: '2',
-      author_username: 'seo_expert',
-      author_name: 'SEO Expert',
-      location: 'New York'
+      post_id: 'ozan_tweet_2',
+      content: 'Bugün müşteri deneyimi optimizasyonu üzerine çok güzel bir proje tamamladık. Veri odaklı yaklaşımın gücünü bir kez daha gördük. Sonuçlar harika! 📊 #CX #DataDriven #Marketing',
+      timestamp: '5 hours ago',
+      posted_at: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
+      likes: 278,
+      retweets: 92,
+      replies: 31,
+      views: 11400,
+      sentiment: 0.92,
+      viralScore: 76,
+      hashtags: ['#CX', '#DataDriven', '#Marketing'],
+      mentions: [],
+      engagement: 7.8,
+      authorId: '1',
+      author_username: 'ozan_sihay',
+      author_name: 'Ozan Şihay',
+      location: 'Istanbul, Turkey'
     },
     {
       id: '3',
@@ -1026,22 +1026,48 @@ export const SocialNews: React.FC = () => {
                           </div>
                           
                           <div className="flex-1">
-                            <div className="flex items-center space-x-4 mb-3">
-                              <h1 className="text-4xl font-bold text-white">{user.displayName}</h1>
-                              <div className={`px-3 py-1 rounded-full bg-gradient-to-r ${getCategoryColor(user.category)} text-white text-sm font-bold`}>
-                                {user.category.toUpperCase()}
+                            <div className="mb-3">
+                              <h1 className="text-4xl font-bold text-white mb-2">{user.displayName}</h1>
+                              <p className="text-gray-400 text-lg mb-4">@{user.username}</p>
+                              
+                              {/* Enhanced Profile Info */}
+                              <div className="flex flex-wrap items-center gap-4 text-sm text-gray-300 mb-4">
+                                {user.location && (
+                                  <span className="flex items-center space-x-1">
+                                    <MapPin className="w-4 h-4" />
+                                    <span>{user.location}</span>
+                                  </span>
+                                )}
+                                {user.category === 'tech' && (
+                                  <span className="flex items-center space-x-1">
+                                    <span>🎬</span>
+                                    <span>Filmmaker</span>
+                                  </span>
+                                )}
+                                {user.website && (
+                                  <span className="flex items-center space-x-1">
+                                    <span>📺</span>
+                                    <span>YouTube Creator</span>
+                                  </span>
+                                )}
+                              </div>
+                              
+                              {/* Follower Stats */}
+                              <div className="flex items-center space-x-6 text-sm text-gray-300 mb-4">
+                                <span>
+                                  <span className="font-bold text-white">{(user.following / 1000).toFixed(1)}K</span>
+                                  <span className="text-gray-400 ml-1">Following</span>
+                                </span>
+                                <span>
+                                  <span className="font-bold text-white">{(user.followers / 1000).toFixed(1)}K</span>
+                                  <span className="text-gray-400 ml-1">Followers</span>
+                                </span>
                               </div>
                             </div>
-                            <p className="text-gray-400 text-lg mb-4">@{user.username}</p>
+                            
                             <p className="text-gray-300 mb-6 leading-relaxed text-lg">{user.bio}</p>
                             
                             <div className="flex flex-wrap items-center gap-6 text-sm text-gray-400 mb-6">
-                              {user.location && (
-                                <div className="flex items-center space-x-2">
-                                  <MapPin className="w-5 h-5" />
-                                  <span>{user.location}</span>
-                                </div>
-                              )}
                               {user.website && (
                                 <div className="flex items-center space-x-2">
                                   <LinkIcon className="w-5 h-5" />
@@ -1064,61 +1090,15 @@ export const SocialNews: React.FC = () => {
                             
                             <div className="flex items-center space-x-8 text-lg">
                               <div>
-                                <span className="font-bold text-white">{formatNumber(user.following)}</span>
-                                <span className="text-gray-400 ml-2">Following</span>
-                              </div>
-                              <div>
-                                <span className="font-bold text-white">{formatNumber(user.followers)}</span>
-                                <span className="text-gray-400 ml-2">Followers</span>
-                              </div>
-                              <div>
                                 <span className="font-bold text-white">{formatNumber(user.stats.totalTweets)}</span>
                                 <span className="text-gray-400 ml-2">Tweets</span>
                               </div>
                             </div>
                           </div>
                           
-                          <div className="flex flex-col space-y-3">
-                            <motion.button
-                              whileHover={{ scale: 1.05 }}
-                              whileTap={{ scale: 0.95 }}
-                              className={`px-8 py-4 bg-gradient-to-r ${themeColors.secondary} text-white rounded-xl font-bold shadow-lg text-lg`}
-                            >
-                              Follow
-                            </motion.button>
-                            <motion.button
-                              whileHover={{ scale: 1.05 }}
-                              whileTap={{ scale: 0.95 }}
-                              className="px-8 py-4 glassmorphism text-white rounded-xl font-bold border border-white/20 text-lg"
-                            >
-                              Message
-                            </motion.button>
-                          </div>
                         </div>
                         
                         {/* User Stats */}
-                        <div className="grid grid-cols-2 lg:grid-cols-5 gap-6 mt-8 pt-8 border-t border-white/10">
-                          {[
-                            { label: 'Avg Engagement', value: `${user.stats.avgEngagement}%`, icon: BarChart3, color: 'text-blue-400' },
-                            { label: 'Influence Score', value: user.stats.influence, icon: Target, color: 'text-purple-400' },
-                            { label: 'Viral Potential', value: `${user.stats.viralPotential}%`, icon: Zap, color: 'text-yellow-400' },
-                            { label: 'Sentiment Trend', value: user.stats.sentimentTrend, icon: TrendingUp, color: 'text-green-400' },
-                            { label: 'Activity Level', value: 'High', icon: Activity, color: 'text-red-400' },
-                          ].map((stat, index) => (
-                            <motion.div
-                              key={stat.label}
-                              initial={{ opacity: 0, scale: 0.8 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              transition={{ delay: index * 0.1 }}
-                              whileHover={{ scale: 1.05, y: -5 }}
-                              className="text-center p-6 glassmorphism-dark rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300"
-                            >
-                              <stat.icon className={`w-8 h-8 ${stat.color} mx-auto mb-3`} />
-                              <div className="text-2xl font-bold text-white mb-2">{stat.value}</div>
-                              <div className="text-sm text-gray-400">{stat.label}</div>
-                            </motion.div>
-                          ))}
-                        </div>
                       </motion.div>
                       
                       {/* User's Tweets */}
