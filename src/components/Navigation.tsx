@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Brain, Home, BarChart3, Settings, Moon, Sun, Menu, X, MessageSquare, Youtube } from 'lucide-react';
+import { Brain, Home, BarChart3, Settings, Moon, Sun, Menu, X, MessageSquare, Youtube, Workflow } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
 interface NavigationProps {
@@ -18,6 +18,7 @@ export const Navigation: React.FC<NavigationProps> = ({ activeSection, setActive
     { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
     { id: 'social-news', label: 'SocialNews', icon: MessageSquare },
     { id: 'youtube-analytics', label: 'YouTube Analiz', icon: Youtube },
+    { id: 'n8n-workflows', label: 'N8N Workflows', icon: Workflow, external: true, url: 'https://n8nworkflowv3-39bzuppbu-kaganterzis-projects.vercel.app/' },
     { id: 'settings', label: 'Settings', icon: Settings },
   ];
 
@@ -55,7 +56,13 @@ export const Navigation: React.FC<NavigationProps> = ({ activeSection, setActive
               {navItems.map((item) => (
                 <motion.button
                   key={item.id}
-                  onClick={() => setActiveSection(item.id)}
+                  onClick={() => {
+                    if (item.external && item.url) {
+                      window.open(item.url, '_blank');
+                    } else {
+                      setActiveSection(item.id);
+                    }
+                  }}
                   whileHover={{ y: -2 }}
                   whileTap={{ scale: 0.95 }}
                   className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-300 ${
@@ -113,7 +120,11 @@ export const Navigation: React.FC<NavigationProps> = ({ activeSection, setActive
               <motion.button
                 key={item.id}
                 onClick={() => {
-                  setActiveSection(item.id);
+                  if (item.external && item.url) {
+                    window.open(item.url, '_blank');
+                  } else {
+                    setActiveSection(item.id);
+                  }
                   setIsMobileMenuOpen(false);
                 }}
                 whileTap={{ scale: 0.95 }}

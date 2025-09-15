@@ -42,29 +42,76 @@ import {
 import { useTheme } from '../contexts/ThemeContext';
 import { useSocialData } from '../hooks/useSocialData';
 
-// Production N8N webhook function
+// Direct SocialAPI.me integration (bypassing N8N)
 const triggerN8NWebhook = async () => {
   try {
-    const response = await fetch('https://iojwzu87.rpcld.app/webhook/twitter-collect', {
-      method: 'POST',
+    console.log('🔄 Fetching tweets directly from SocialAPI.me...');
+    
+    // Direkt SocialAPI.me'den Ozan'ın tweet'lerini çek
+    const response = await fetch('https://api.socialapi.me/twitter/user/72270748/tweets', {
       headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        action: 'fetch_latest',
-        limit: 10,
-        timestamp: new Date().toISOString()
-      })
+        'Authorization': 'Bearer 3466|wiObGmoZYEM5FvSSeZV5hbmF7C5QMGWkv9Ej7vrc4eb4d884'
+      }
     });
-
+    
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new Error(`SocialAPI.me error! status: ${response.status}`);
     }
+    
+    const tweetsData = await response.json();
+    console.log('🐦 Direct SocialAPI.me Response:', tweetsData);
+    
+    // Veriyi Supabase'e yaz
+    if (tweetsData.tweets && tweetsData.tweets.length > 0) {
+      const { supabase } = await import('../lib/supabase');
+      
+      const formattedTweets = tweetsData.tweets
+        .filter(tweet => !tweet.in_reply_to_status_id) // Mention'ları hariç tut
+        .slice(0, 10)
+        .map(tweet => ({
+          platform: 'twitter',
+          post_id: tweet.id_str,
+          content: tweet.full_text || tweet.text,
+          author_username: tweet.user.screen_name,
+          author_id: tweet.user.id_str,
+          author_name: tweet.user.name,
+          url: `https://twitter.com/${tweet.user.screen_name}/status/${tweet.id_str}`,
+          likes_count: tweet.favorite_count || 0,
+          retweets_count: tweet.retweet_count || 0,
+          replies_count: tweet.reply_count || 0,
+          language: tweet.lang || 'tr',
+          posted_at: new Date(tweet.tweet_created_at).toISOString(),
+          is_retweet: !!tweet.retweeted_status,
+          is_reply: !!tweet.in_reply_to_status_id,
+          has_media: !!(tweet.entities?.media?.length),
+          created_at: new Date().toISOString(),
+          imported_at: new Date().toISOString()
+        }));
 
-    const data = await response.json();
-    return { success: true, data };
+      // Supabase'e batch insert
+      const { error } = await supabase
+        .from('social_media_posts')
+        .upsert(formattedTweets, { onConflict: 'post_id' });
+
+      if (error) {
+        console.error('❌ Supabase Error:', error);
+      } else {
+        console.log('✅ Tweets successfully written to Supabase');
+      }
+      
+      return { 
+        success: true,
+        data: { 
+          message: 'Direct API call completed', 
+          tweets: formattedTweets.length,
+          source: 'socialapi.me' 
+        }
+      };
+    }
+    
+    return { success: true, data: { message: 'No tweets found' } };
   } catch (error) {
-    console.error('Error triggering N8N webhook:', error);
+    console.error('❌ Direct API Error:', error);
     throw error;
   }
 };
