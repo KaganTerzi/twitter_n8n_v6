@@ -1,0 +1,124 @@
+{
+  "name": "Twitter Monitor - Ozan Sihay",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "34814979-79e8-42cf-a155-529e4189bc0f",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "webhook-node",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "webhookId": "34814979-79e8-42cf-a155-529e4189bc0f"
+    },
+    {
+      "parameters": {
+        "url": "https://api.socialapi.me/twitter/user/72270748/tweets",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "limit",
+              "value": "10"
+            }
+          ]
+        },
+        "options": {
+          "headers": {
+            "Authorization": "Bearer 3481|OEGkC1cdtDFl8udLapLeyOdUkRdQkaDQKxqNU7oxd090a655"
+          }
+        }
+      },
+      "id": "get-tweets-node",
+      "name": "Get ozan_sihay Tweets",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Process and filter tweets\nconst tweets = $input.first().json.tweets || [];\n\n// Filter out replies and process tweets\nconst processedTweets = tweets\n  .filter(tweet => !tweet.in_reply_to_status_id) // Remove replies\n  .map(tweet => ({\n    id: tweet.id_str,\n    title: tweet.full_text || tweet.text,\n    username: tweet.user.screen_name,\n    user_name: tweet.user.name,\n    user_id: tweet.user.id_str,\n    created_at: tweet.tweet_created_at,\n    timestamp: new Date().toISOString(),\n    likes_count: tweet.favorite_count || 0,\n    retweets_count: tweet.retweet_count || 0,\n    replies_count: tweet.reply_count || 0,\n    views_count: tweet.views_count || 0,\n    url: `https://twitter.com/${tweet.user.screen_name}/status/${tweet.id_str}`,\n    hashtags: tweet.entities?.hashtags?.map(h => h.text) || [],\n    mentions: tweet.entities?.user_mentions?.map(m => m.screen_name) || [],\n    media_urls: tweet.entities?.media?.map(m => m.media_url_https) || [],\n    is_quote: tweet.is_quote_status || false,\n    lang: tweet.lang || 'tr',\n    source: 'socialapi.me'\n  }));\n\n// Return processed data\nreturn {\n  tweets: processedTweets,\n  count: processedTweets.length,\n  processed_at: new Date().toISOString(),\n  user: 'ozan_sihay',\n  source: 'n8n_workflow'\n};"
+      },
+      "id": "process-filter-node",
+      "name": "Process & Filter",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://follow.trade/api/social-news",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "data",
+              "value": "={{ $json }}"
+            }
+          ]
+        },
+        "options": {
+          "headers": {
+            "Content-Type": "application/json"
+          }
+        }
+      },
+      "id": "send-to-api-node",
+      "name": "Send to API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [900, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get ozan_sihay Tweets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get ozan_sihay Tweets": {
+      "main": [
+        [
+          {
+            "node": "Process & Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process & Filter": {
+      "main": [
+        [
+          {
+            "node": "Send to API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "id": "twitter-monitor-workflow",
+  "tags": []
+}
