@@ -41,6 +41,7 @@ import {
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useSocialData } from '../hooks/useSocialData';
+import { getTweets, addTweets } from '../api/social-news';
 
 // Direct SocialAPI.me integration (bypassing N8N)
 const triggerN8NWebhook = async () => {
@@ -173,6 +174,7 @@ export const SocialNews: React.FC = () => {
   const themeColors = getThemeColors();
   const { socialPosts, loading, error, refreshData } = useSocialData();
   const [realTimeData, setRealTimeData] = useState<any[]>([]);
+  const [n8nTweets, setN8nTweets] = useState<Tweet[]>([]);
   
   // Mock data - n8n workflow'undan gelecek gerçek veriler
   const mockUsers: TwitterUser[] = [
@@ -405,8 +407,8 @@ export const SocialNews: React.FC = () => {
   const [showSettings, setShowSettings] = useState(false);
   const [timeFilter, setTimeFilter] = useState<6 | 12 | 24 | 48 | 168>(24);
   
-  // Convert socialPosts to tweets format or use fallback data
-  const tweets = socialPosts.length > 0 ? socialPosts.map(post => ({
+  // Convert socialPosts to tweets format, combine with N8N data, or use fallback data
+  const tweets = [...n8nTweets, ...(socialPosts.length > 0 ? socialPosts.map(post => ({
     id: post.id,
     platform: post.platform,
     post_id: post.post_id,
@@ -426,7 +428,7 @@ export const SocialNews: React.FC = () => {
     author_username: post.author_username,
     author_name: post.author_name,
     location: post.location
-  })) : [
+  })) : []), ...(n8nTweets.length === 0 && socialPosts.length === 0 ? [
     {
       id: '1',
       platform: 'twitter',
@@ -511,9 +513,47 @@ export const SocialNews: React.FC = () => {
       author_name: 'Ozan Şihay',
       location: 'Toronto, Canada'
     }
-  ];
+  ] : [])];
 
   const [errorMessage, setErrorMessage] = useState('');
+
+  // N8N'den gelen verileri çek
+  const fetchN8NTweets = async () => {
+    try {
+      const tweets = await getTweets();
+      const formattedTweets: Tweet[] = tweets.map(tweet => ({
+        id: tweet.id,
+        platform: 'twitter',
+        post_id: tweet.id,
+        content: tweet.title,
+        timestamp: formatTimeAgo(new Date(tweet.timestamp)),
+        posted_at: tweet.timestamp,
+        likes: Math.floor(Math.random() * 500),
+        retweets: Math.floor(Math.random() * 200),
+        replies: Math.floor(Math.random() * 100),
+        views: Math.floor(Math.random() * 10000),
+        sentiment: Math.random(),
+        viralScore: Math.floor(Math.random() * 100),
+        hashtags: [],
+        mentions: [],
+        engagement: Math.random() * 10,
+        authorId: tweet.username,
+        author_username: tweet.username,
+        author_name: tweet.username,
+        location: 'Turkey'
+      }));
+      setN8nTweets(formattedTweets);
+    } catch (error) {
+      console.error('Error fetching N8N tweets:', error);
+    }
+  };
+
+  // Component mount edildiğinde N8N verilerini çek
+  useEffect(() => {
+    fetchN8NTweets();
+    const interval = setInterval(fetchN8NTweets, 30000); // Her 30 saniyede bir kontrol et
+    return () => clearInterval(interval);
+  }, []);
 
   // N8N'den gelen veriyi parse etme fonksiyonu
   const parseN8NData = (rawData: any) => {
@@ -632,6 +672,9 @@ export const SocialNews: React.FC = () => {
       }
       
       console.log('✅ Data refresh process completed!');
+      
+      // N8N verilerini de yenile
+      await fetchN8NTweets();
       
     } catch (error) {
       console.error('❌ Error during refresh:', error);
