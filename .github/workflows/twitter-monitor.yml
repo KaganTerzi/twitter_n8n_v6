@@ -1,0 +1,71 @@
+name: Twitter Monitor - Auto Send to N8N
+
+on:
+  schedule:
+    - cron: '*/2 * * * *'  # Her 2 dakika
+  workflow_dispatch:  # Manuel tetikleme
+
+jobs:
+  fetch-and-send-tweets:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Fetch Twitter Data
+      run: |
+        echo "🔄 Fetching tweets from SocialAPI.me..."
+        curl -H "Authorization: Bearer 3481|OEGkC1cdtDFl8udLapLeyOdUkRdQkaDQKxqNU7oxd090a655" \
+             "https://api.socialapi.me/twitter/user/72270748/tweets?limit=10" \
+             -o tweets_raw.json
+        
+        echo "📄 Raw API response saved"
+        
+    - name: Process Tweet Data
+      run: |
+        echo "🔄 Processing tweet data..."
+        
+        # Process tweets with jq
+        cat tweets_raw.json | jq '{
+          tweets: [.tweets[] | select(.in_reply_to_status_id == null) | {
+            id: .id_str,
+            title: (.full_text // .text),
+            username: .user.screen_name,
+            user_name: .user.name,
+            user_id: .user.id_str,
+            created_at: .tweet_created_at,
+            timestamp: now | strftime("%Y-%m-%dT%H:%M:%SZ"),
+            likes_count: (.favorite_count // 0),
+            retweets_count: (.retweet_count // 0),
+            replies_count: (.reply_count // 0),
+            views_count: (.views_count // 0),
+            url: "https://twitter.com/\(.user.screen_name)/status/\(.id_str)",
+            hashtags: [.entities.hashtags[]?.text // empty],
+            mentions: [.entities.user_mentions[]?.screen_name // empty],
+            media_urls: [.entities.media[]?.media_url_https // empty],
+            is_quote: (.is_quote_status // false),
+            lang: (.lang // "tr"),
+            source: "socialapi.me"
+          }],
+          count: [.tweets[] | select(.in_reply_to_status_id == null)] | length,
+          processed_at: now | strftime("%Y-%m-%dT%H:%M:%SZ"),
+          user: "ozan_sihay"
+        }' > tweets_processed.json
+        
+        echo "✅ Tweets processed and filtered"
+        
+    - name: Send to N8N Webhook
+      run: |
+        echo "📤 Sending data to N8N webhook..."
+        
+        curl -X POST "https://iojwzu87.rpcld.app/webhook/34814979-79e8-42cf-a155-529e4189bc0f" \
+             -H "Content-Type: application/json" \
+             -d @tweets_processed.json \
+             -w "HTTP Status: %{http_code}\n"
+        
+        echo "✅ Data sent to N8N successfully"
+        
+    - name: Log Results
+      run: |
+        echo "📊 Summary:"
+        echo "- Processed tweets: $(cat tweets_processed.json | jq '.count')"
+        echo "- User: $(cat tweets_processed.json | jq -r '.user')"
+        echo "- Timestamp: $(cat tweets_processed.json | jq -r '.processed_at')"
