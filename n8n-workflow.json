@@ -74,6 +74,17 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
       "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "message": "=Workflow completed successfully! Processed {{ $json.count }} tweets for user {{ $json.user }} at {{ $json.processed_at }}",
+        "options": {}
+      },
+      "id": "log-completion-node",
+      "name": "Log Completion",
+      "type": "n8n-nodes-base.log",
+      "typeVersion": 1,
+      "position": [1120, 300]
     }
   ],
   "connections": {
@@ -104,6 +115,17 @@
         [
           {
             "node": "Send to API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send to API": {
+      "main": [
+        [
+          {
+            "node": "Log Completion",
             "type": "main",
             "index": 0
           }
