@@ -12,9 +12,9 @@ jobs:
     steps:
     - name: Fetch Twitter Data
       run: |
-        echo "🔄 Fetching tweets from SocialAPI.me..."
-        curl -H "Authorization: Bearer 3481|OEGkC1cdtDFl8udLapLeyOdUkRdQkaDQKxqNU7oxd090a655" \
-             "https://api.socialapi.me/twitter/user/72270748/tweets?limit=10" \
+        echo "🔄 Fetching tweets from TwitterAPI.io..."
+        curl -H "Authorization: Bearer ${{ secrets.TWITTERAPI_IO_KEY }}" \
+             "https://api.twitterapi.io/v1/user/tweets?user_id=72270748&count=10&include_rts=false&include_replies=false" \
              -o tweets_raw.json
         
         echo "📄 Raw API response saved"

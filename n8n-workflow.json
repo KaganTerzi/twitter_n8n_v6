@@ -17,21 +17,33 @@
     },
     {
       "parameters": {
-        "url": "https://api.socialapi.me/twitter/user/72270748/tweets",
+        "url": "https://api.twitterapi.io/v1/user/tweets",
         "authentication": "predefinedCredentialType",
         "nodeCredentialType": "httpHeaderAuth",
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
             {
-              "name": "limit",
+              "name": "user_id",
+              "value": "72270748"
+            },
+            {
+              "name": "count",
               "value": "10"
+            },
+            {
+              "name": "include_rts",
+              "value": "false"
+            },
+            {
+              "name": "include_replies",
+              "value": "false"
             }
           ]
         },
         "options": {
           "headers": {
-            "Authorization": "Bearer 3481|OEGkC1cdtDFl8udLapLeyOdUkRdQkaDQKxqNU7oxd090a655"
+            "Authorization": "Bearer YOUR_TWITTERAPI_IO_KEY"
           }
         }
       },
